@@ -27,6 +27,7 @@ while(not done):
     var = raw_input("Enter Server Command: ")
     while(not legalResponse(var)):
         var = raw_input("Invalid Command Error!\nEnter Server Command: ")
+        
     if(var == 'close'):
         done = True
     else:
