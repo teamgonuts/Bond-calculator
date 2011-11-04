@@ -1,0 +1,23 @@
+# data input file
+# Each data item can be no larger than 32 chars
+#
+# constant maturity treasury curve - assumed all semi-annual freq
+#
+# format:
+#
+# Ticker Term(in years)  Yield
+#
+# data input file
+# Each data item can be no larger than 32 chars
+# format:
+#
+# SecurityID Ticker SettlementDate Coupon MaturityDate Frequency RateType Rate Quality Amount
+#
+# added a new type to quality "GOVT" - which we consider riskless
+# amounts don't matter but we want to re-use the data loading class so set it at 1 and ignore it
+# also, we are assuming these are "constant maturity" bonds (term between settlement and mat date never changes)
+#
+T30 US 20091015 4.0 20391015 2 YIELD 4.0 GOVT 1
+T2  US 20091015 1.0 20111015 2 YIELD 1.0 GOVT 1
+T5  US 20091015 2.0 20141015 2 YIELD 2.0 GOVT 1
+T10 US 20091015 3.0 20191015 2 YIELD 3.0 GOVT 1
