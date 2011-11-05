@@ -7,6 +7,7 @@ EXECUTABLE=./testdriver
 ERROR_LOGFILE=error_logfile
 DATA_INPUT_FILE="./midterm.txt"
 DATA_INPUT_FILE="tradingbook.txt"
+DATA_INPUT_FILE="tradingbook1.txt"
 
 YC_INPUT_FILE="yieldcurve.txt"
 

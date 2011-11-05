@@ -64,7 +64,7 @@ $(LIB_CAL_OBJ) : $(LIB_CAL_SRC_HDR)
 LIB_CAL_TARGET = libcal.a
 #
 # the file where main() is
-MAIN_SRC = mmain.cc
+MAIN_SRC = sbb_server.c
 MAINOBJ = $(MAIN_SRC:.cc=.o) 
 $(MAINOBJ) : $(LIB_TARGET) $(LIB_UTIL_TARGET) $(LIB_IO_TARGET) $(LIB_DATE_TARGET) $(LIB_RATING_TARGET)
 MAINTARGET=testdriver
