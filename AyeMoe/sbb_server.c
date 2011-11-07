@@ -106,6 +106,7 @@ main()
         /*
          * read in the tradingbook.txt and perform calculation
          */
+        double realtime = 0.0, usertime = 0.0, systemtime = 0.0;
         SBB_util timer;
         timer.start_clock();
         
@@ -230,12 +231,12 @@ main()
         
         double numOf2YrBond = totalBucketRisk/dv01_2yrT;
         
-        timer.end_clock();
+        timer.end_clock(realtime, usertime, systemtime);
 
 		/* 
 		 * ack back to the client 
 		 */
-        sprintf (msg, "%.3f %.3f %.3f", totalMarketValue_yieldUp, totalMarketValue_yieldDown,numOf2YrBond);
+        sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", totalMarketValue_yieldUp, totalMarketValue_yieldDown,numOf2YrBond, realtime, usertime, systemtime);
 
 		//strcpy(msg," this is the server message response!");
 		if (send(sd_current, msg, strlen(msg), 0) == -1) {
