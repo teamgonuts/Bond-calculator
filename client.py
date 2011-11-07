@@ -31,7 +31,7 @@ while(not done):
     if(var == 'close'):
         done = True
     else:
-        s.send('Hello, world from a python client!')
+        s.send(var)
         data = s.recv(MSGSIZE)
         print 'Received response from the server of:', repr(data)
 

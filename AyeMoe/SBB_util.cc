@@ -53,10 +53,11 @@ SBB_util::end_clock(double& real_time, double& user_time, double& system_time)
 	intmax_t system_time_diff = _end_cpu.tms_stime - _start_cpu.tms_stime;
 	double ticks_per_second_casted = Ticks_per_second; // so I can divide
 
-	//printf("\nREAL seconds: %3.3f (USER space seconds: %3.3f SYSTEM space seconds: %3.3f)\n\n",
 	real_time = real_time_diff/ticks_per_second_casted;
 	user_time = user_time_diff/ticks_per_second_casted;
 	system_time = system_time_diff/ticks_per_second_casted;
+    //printf("\nREAL seconds: %3.3f (USER space seconds: %3.3f SYSTEM space seconds: %3.3f)\n\n",real_time, user_time, system_time);
+	
 }
 
 #endif

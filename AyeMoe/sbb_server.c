@@ -136,14 +136,18 @@ main()
          */
         for(int index = 0 ; index < yield_record_count; index++){
             if(strcmp(_yc_fields[index].SecurityID, "T2") == 0){
-                priceCalculator = new Zero_Coupon_Calculator(_yc_fields[index].YieldRate, _yc_fields[index].Frequency, 2);
+                if(_yc_fields[index].CouponRate > 0.0){
+                    priceCalculator = new Coupon_Bond_Calculator(_yc_fields[index].YieldRate,_yc_fields[index].CouponRate, _yc_fields[index].Frequency, 2);
+                }else{
+                    priceCalculator = new Zero_Coupon_Calculator(_yc_fields[index].YieldRate, _yc_fields[index].Frequency, 2);
+                }
                 dv01_2yrT = priceCalculator->calculate_dv01();
                 printf("2Yr T dv01 is %f \n", dv01_2yrT);
             }
         }
         
         for(int i = 0 ; i < record_count ; i++){
-            bonds[i].show();
+            //bonds[i].show();
             
             //first find the years to maturity
             int years_to_maturity = priceCalculator->calculate_years_to_maturity(bonds[i].SettlementDate, bonds[i].MaturityDate);
@@ -232,8 +236,7 @@ main()
         double numOf2YrBond = totalBucketRisk/dv01_2yrT;
         
         timer.end_clock(realtime, usertime, systemtime);
-
-		/* 
+        /* 
 		 * ack back to the client 
 		 */
         sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", totalMarketValue_yieldUp, totalMarketValue_yieldDown,numOf2YrBond, realtime, usertime, systemtime);
