@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdexcept>
 #include <string.h>
+#include <stdlib.h>
+#include <cerrno>
+#include <cstdio>
 
 #define SBB_LINE_BUFFER_LENGTH 256
 #define SBB_INSTRUMENT_ID_LENGTH 32

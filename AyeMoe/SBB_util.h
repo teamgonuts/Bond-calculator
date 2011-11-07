@@ -1,7 +1,10 @@
 #include <sys/times.h>
 #include <sys/errno.h>
 #include <stdio.h>
+#include <cstdio>
+#include <stdlib.h>
 #include <stdexcept> // std::runtime_error
+
 
 #define START_TIMER(obj) \
 	printf("start_clock in file: %s line: %d\n", __FILE__, __LINE__); \
