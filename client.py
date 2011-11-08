@@ -22,6 +22,12 @@ s.connect((HOST, PORT))
 
 done = False;
 #Server doesn't need to handle close
+
+var = "go";
+s.send(var)
+data = s.recv(MSGSIZE)
+print 'Received response from the server of:', repr(data)
+"""
 while(not done):
     #getting user input
     var = raw_input("Enter Server Command: ")
@@ -34,7 +40,7 @@ while(not done):
         s.send(var)
         data = s.recv(MSGSIZE)
         print 'Received response from the server of:', repr(data)
-
+"""
 s.close()
 
 

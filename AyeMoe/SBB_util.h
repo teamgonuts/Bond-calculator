@@ -1,7 +1,10 @@
 #include <sys/times.h>
 #include <sys/errno.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <cstdio>
+#include <string.h>
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdexcept> // std::runtime_error
 

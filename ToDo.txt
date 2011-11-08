@@ -1,3 +1,6 @@
+CHANGES:
+-only one call from client to server for 1st submission (download new util.h...time should be output on client side)
+
 Messages from Client to Server:
 load - tells server to load bonds off "tradingbook.txt" and "yieldcurve.txt" into   specified buckets
 
