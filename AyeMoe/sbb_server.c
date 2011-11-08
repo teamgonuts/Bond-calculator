@@ -142,7 +142,7 @@ main()
                     priceCalculator = new Zero_Coupon_Calculator(_yc_fields[index].YieldRate, _yc_fields[index].Frequency, 2);
                 }
                 dv01_2yrT = priceCalculator->calculate_dv01();
-                printf("2Yr T dv01 is %f \n", dv01_2yrT);
+                //printf("2Yr T dv01 is %f \n", dv01_2yrT);
             }
         }
         
@@ -240,7 +240,7 @@ main()
 		 * ack back to the client 
 		 */
         sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", totalMarketValue_yieldUp, totalMarketValue_yieldDown,numOf2YrBond, realtime, usertime, systemtime);
-
+        
 		//strcpy(msg," this is the server message response!");
 		if (send(sd_current, msg, strlen(msg), 0) == -1) {
 			fprintf(stderr,"SBB send(...) failed errno: %d exiting...\n", errno);
