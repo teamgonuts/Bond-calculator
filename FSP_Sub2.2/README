@@ -5,3 +5,14 @@ Output
 VaR_Ratings - VaR of closing portfolio given confidence interval of 99%	
 Total portfolio LGD change due to ratings downgrade/upgrade
 Total Portfolio Amount change(NOT "Market Value") from start to end of day
+
+Input - both trading books are specified in run.sh
+Opening Trading Book - opening trading book position, the file should be in the same folder as the source code
+Closing Trading Book - ending trading book position, the file should be in the same folder as the source code
+
+Instructions
+- type 'Make Clobber' to clean up previous build
+- type 'Make all' to build the source code
+- type 'sh run.sh'
+- open another tab, navigate to the folder where the client.py code is
+- type 'python client.py'
