@@ -129,6 +129,7 @@ main()
         double totalBucketRisk = 0.0; //total risk of the bonds in 10-30 yr bucket
         double totalMarketValue_yieldUp = 0.0; //total market value of portfolio after 100 bp yield up
         double totalMarketValue_yieldDown = 0.0; //total market value of portfolio after 100bp yiled down
+        double totalMarketValue_original = 0.0;
         double dv01_2yrT = 0.0; //dv01 of 2 yr T bonds
         
         /*
@@ -142,7 +143,7 @@ main()
                     priceCalculator = new Zero_Coupon_Calculator(_yc_fields[index].YieldRate, _yc_fields[index].Frequency, 2);
                 }
                 dv01_2yrT = priceCalculator->calculate_dv01();
-                //printf("2Yr T dv01 is %f \n", dv01_2yrT);
+                printf("2Yr T dv01 is %f \n", dv01_2yrT);
             }
         }
         
@@ -191,35 +192,51 @@ main()
                 
             }
             
+            //original total market value
             if(bonds[i].CouponRate == 0.0){ //100 basis point = 1%
-                priceCalculator = new Zero_Coupon_Calculator(yield + 0.01, bonds[i].Frequency, years_to_maturity);
+                priceCalculator = new Zero_Coupon_Calculator(yield, bonds[i].Frequency, years_to_maturity);
                 
             }
             
             if(bonds[i].CouponRate > 0.0){
-                priceCalculator = new Coupon_Bond_Calculator(yield + 0.01, bonds[i].CouponRate, bonds[i].Frequency, years_to_maturity);
+                priceCalculator = new Coupon_Bond_Calculator(yield, bonds[i].CouponRate, bonds[i].Frequency, years_to_maturity);
+                
+            }
+            double originalPrice = priceCalculator->calculate_price();
+            totalMarketValue_original += (originalPrice/100) * bonds[i].Amount;
+            
+            /** Increase 100 bp **/
+            
+            if(bonds[i].CouponRate == 0.0){ //100 basis point = 1%
+                priceCalculator = new Zero_Coupon_Calculator(yield + 1, bonds[i].Frequency, years_to_maturity);
+                
+            }
+            
+            if(bonds[i].CouponRate > 0.0){
+                priceCalculator = new Coupon_Bond_Calculator(yield + 1, bonds[i].CouponRate, bonds[i].Frequency, years_to_maturity);
                 
             }
             double price_yieldup = priceCalculator->calculate_price();
-            totalMarketValue_yieldUp += price_yieldup * bonds[i].Amount;
+            totalMarketValue_yieldUp += (price_yieldup/100) * bonds[i].Amount;
             
             //now decrease 100 basis point
             //priceCalculator.yield = yield - 0.01;
             if(bonds[i].CouponRate == 0.0){ //100 basis point = 1%
-                priceCalculator = new Zero_Coupon_Calculator(yield - 0.01, bonds[i].Frequency, years_to_maturity);
+                priceCalculator = new Zero_Coupon_Calculator(yield - 1, bonds[i].Frequency, years_to_maturity);
                 //priceCalculator.yield = yield - 0.01;
                 
             }
             
             if(bonds[i].CouponRate > 0.0){
-                priceCalculator = new Coupon_Bond_Calculator(yield - 0.01, bonds[i].CouponRate, bonds[i].Frequency, years_to_maturity);
+                priceCalculator = new Coupon_Bond_Calculator(yield - 1, bonds[i].CouponRate, bonds[i].Frequency, years_to_maturity);
                 
             }
             double price_yielddown = priceCalculator->calculate_price();
-            totalMarketValue_yieldDown += price_yielddown * bonds[i].Amount;
+            totalMarketValue_yieldDown += (price_yielddown/100) * bonds[i].Amount;
             
             
-            if(years_to_maturity >= 10 && years_to_maturity < 30){
+            if(years_to_maturity > 10){
+                //printf("%s \n", bonds[i].SecurityID);
                 if(bonds[i].CouponRate == 0.0){ //100 basis point = 1%
                     priceCalculator = new Zero_Coupon_Calculator(yield, bonds[i].Frequency, years_to_maturity);
                 }
@@ -227,11 +244,13 @@ main()
                 if(bonds[i].CouponRate > 0.0){
                     priceCalculator = new Coupon_Bond_Calculator(yield, bonds[i].CouponRate, bonds[i].Frequency, years_to_maturity);
                 }
-                
-                totalBucketRisk += priceCalculator->calculate_dv01() * bonds[i].Amount;
-
+                double dv01 = priceCalculator->calculate_dv01();
+                totalBucketRisk += (dv01/100) * bonds[i].Amount;
+              
             }
         }
+        
+       // printf("totalBucketRisk:  %.3f \n", totalBucketRisk);
         
         double numOf2YrBond = totalBucketRisk/dv01_2yrT;
         
@@ -239,7 +258,12 @@ main()
         /* 
 		 * ack back to the client 
 		 */
-        sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", totalMarketValue_yieldUp, totalMarketValue_yieldDown,numOf2YrBond, realtime, usertime, systemtime);
+        
+        //printf("Original Market Value:  %.3f \n", totalMarketValue_original);
+        //printf("Yield Up Market Value:  %.3f \n", totalMarketValue_yieldUp);
+        //printf("Yield Down Market Value:  %.3f \n", totalMarketValue_yieldDown);
+        
+        sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", (numOf2YrBond* -1), (totalMarketValue_original - totalMarketValue_yieldUp), (totalMarketValue_original - totalMarketValue_yieldDown), realtime, usertime, systemtime);
         
 		//strcpy(msg," this is the server message response!");
 		if (send(sd_current, msg, strlen(msg), 0) == -1) {
