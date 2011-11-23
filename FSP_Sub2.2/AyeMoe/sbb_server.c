@@ -131,22 +131,26 @@ main(int argc, const char* arg[])
         //SBB_instrument_fields* _yc_fields = yieldFile.get_records(yield_record_count);//load the yield file
         SBB_bond_ratings bond_ratings;
         
-        double _total_opening_lgd = 0.0;
-        double _total_closing_lgd = 0.0;
-        double _total_opening_portfolio_amount = 0.0;
-        double _total_closing_portfolio_amount = 0.0;
+        double _total_opening_lgd = 0.0; //total portfolio LGD at the start of the day aka opening trading book
+        double _total_closing_lgd = 0.0; //total portfolio LGD at the end of the day aka closing trading book
+        double _total_opening_portfolio_amount = 0.0; //total portfolio amount at the start of the day
+        double _total_closing_portfolio_amount = 0.0; //total portfolio amount at the end of the day
         
         for(int i = 0 ; i < _opening_book_records_count ; i++){
-                       
-            double _opening_bond_lgd = bond_ratings.LGD_given_SnP_Fitch(_opening_book_fields[i].Quality.c_str());
-            _total_opening_lgd += (_opening_bond_lgd * _opening_book_fields[i].Amount);
+             
+            //Get LGD from start of the day
+            double _opening_bond_lgd = bond_ratings.LGD_given_SnP_Fitch(_opening_book_fields[i].Quality.c_str());//get the LGD from the array using bond's rating
+            _total_opening_lgd += (_opening_bond_lgd * _opening_book_fields[i].Amount); //calculate total LGD by multiplying LGD with the amount
             
+            //Get LGD from end of the day
             double _closing_bond_lgd = bond_ratings.LGD_given_SnP_Fitch(_closing_book_fields[i].Quality.c_str());
             _total_closing_lgd += (_closing_bond_lgd * _closing_book_fields[i].Amount);
             
+            //this is temporary output for debugging
             printf("Opening lgd amount : %s %.3f %.3f \n",_opening_book_fields[i].SecurityID, _opening_bond_lgd, _opening_bond_lgd * _opening_book_fields[i].Amount);
             printf("Closing lgd amount : %s %.3f %.3f \n",_closing_book_fields[i].SecurityID, _closing_bond_lgd, _closing_bond_lgd * _closing_book_fields[i].Amount);
             
+            //Get total portfolio amount for beginning of the day and end of the day
             _total_opening_portfolio_amount += _opening_book_fields[i].Amount;
             _total_closing_portfolio_amount += _closing_book_fields[i].Amount;
             
