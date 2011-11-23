@@ -1,0 +1,13 @@
+CHANGES:
+-only one call from client to server for 1st submission (download new util.h...time should be output on client side)
+
+Messages from Client to Server:
+load - tells server to load bonds off "tradingbook.txt" and "yieldcurve.txt" into   specified buckets
+
+hedge30yr - commands server to calculate the amount of 2 year treasuries needed to hedge risk in the 30 year maturity bucket
+
+yield+100bp - Market value change of portfolio given 100 basis point shift UP of all yields
+
+yield-100bp - Market value change of portfolio given 100 basis point shift DOWN of all yields
+
+close - closes the client

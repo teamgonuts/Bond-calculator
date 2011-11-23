@@ -1,0 +1,22 @@
+# data input file
+# Each data item can be no larger than 32 chars
+# format:
+#
+# SecurityID Ticker SettlementDate Coupon MaturityDate Frequency RateType Rate Quality Amount
+#
+# if RateType is "Yield" then the next column (Rate) is yield to maturity
+# if RateTyps is "Spread" then the next column (Rate) is the spread in basis points. This would need to be added
+#  to the yield off the benchmark yield curve which is loaded from a separate file...
+#
+SBB_0001 GM 20091115 3.0 20101115 2 YIELD 3.0 BBB -1000
+SBB_0002 GM 20091115 3.5 20111115 2 YIELD 3.1 BBB -10000
+SBB_0003 GM 20091115 3.8 20121115 2 YIELD 3.2 BBB -100000
+SBB_0004 FG 20091115 3.9 20131115 2 YIELD 3.3 BB  -1000
+SBB_0005 FG 20091115 4.0 20141115 2 YIELD 3.4 BB  -1000
+SBB_0006 FG 20091115 5.0 20151115 2 YIELD 3.5 BB   1000
+SBB_0007 YU 20091115 5.5 20161115 2 YIELD 3.6 BB   1000
+SBB_0008 XY 20091115 5.0 20171115 2 YIELD 3.7 AA   1000
+SBB_0009 XY 20091115 5.0 20181115 2 YIELD 3.8 AA   10000
+SBB_0010 XY 20091115 5.0 20191115 2 YIELD 3.9 AA   100000
+SBB_0011 TT 20091115 0.0 20291115 2 YIELD 4.0 AAA  500000
+SBB_0012 TT 20091115 5.0 20101115 2 SPREAD 30 BB   1000
