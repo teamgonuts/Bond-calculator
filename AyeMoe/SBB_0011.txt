@@ -1,0 +1,35 @@
+#
+# data input file
+# Each data item can be no larger than 32 chars
+#
+# schema::
+#
+# Date RateType RateValue BenchmarkTicker
+#
+# IF:
+#
+#  RateType is "YIELD" then RateValue will contain yield and BenchmarkID will contain NULL
+#  	example: 20101101 YIELD 3.25  NULL
+#
+#  RateType is "SPREAD" then RateValue is the spread over the ticker T2's yield (taken from the T2.txt file)
+#  	example: 20101101 SPREAD 22.1 T2
+#
+# Each file will contain historica data for 1 security for N  prior days
+# The file name will be SecurityID.txt
+#	example: "SBB_001.txt"
+#
+# For a given file/securityID all days will be priced consistently 
+# e.g., all days will be either spread or yield driven 
+#	(pricing modes won't be mixed for a given security in the historical file).
+#
+20111031 YIELD 4.1 NULL
+20111101 YIELD 4.3 NULL
+20111102 YIELD 4.6 NULL
+20111103 YIELD 3.9 NULL
+20111104 YIELD 3.8 NULL
+20111107 YIELD 3.7 NULL
+20111108 YIELD 3.0 NULL
+20111109 YIELD 4.0 NULL
+20111110 YIELD 3.8 NULL
+20111111 YIELD 3.7 NULL
+20111114 YIELD 3.6 NULL

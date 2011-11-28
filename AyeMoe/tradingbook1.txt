@@ -1,0 +1,31 @@
+#
+# if you have comments in the ouput file first character must be #
+# 
+# appended at end of each input line will be:
+# 	price   dv01   risk     LGD
+#
+# 	all will have 3 places of precision
+#
+#	LGD is amount adjusted (multiply LGD by Amount)
+#
+# Below are three lines with the correct outputs in the correct format
+#
+# For example, for the last line price is 45.289, dv01 is .089 and risk is 444.011.
+# This means that for the position amount of 500000 ($50 million since units are in thousands),
+# we will make $44,4011 for each basis point move down in yield (since we are long, if yields go down, price goes up)
+#
+#
+#
+#
+SBB_0001 GM 20091115 3.0 20101115 2 YIELD 3.0 BBB -1000
+SBB_0012 TT 20091115 5.0 20101115 2 SPREAD 30 BB   1000 103.664 0.010 0.102 200.000
+SBB_0002 GM 20091115 3.5 20111115 2 YIELD 3.1 BBB -10000
+SBB_0003 GM 20091115 3.8 20121115 2 YIELD 3.2 BBB -100000
+SBB_0004 FG 20091115 3.9 20131115 2 YIELD 3.3 BB  -1000
+SBB_0005 FG 20091115 4.0 20141115 2 YIELD 3.4 BB  -1000
+SBB_0006 FG 20091115 5.0 20151115 2 YIELD 3.5 BB   1000
+SBB_0007 YU 20091115 5.5 20161115 2 YIELD 3.6 BB   1000
+SBB_0008 XY 20091115 5.0 20171115 2 YIELD 3.7 AA   1000
+SBB_0009 XY 20091115 5.0 20181115 2 YIELD 3.8 AA   10000
+SBB_0010 XY 20091115 5.0 20191115 2 YIELD 3.9 AA   100000 109.037 0.087 86.523 0.000
+SBB_0011 TT 20091115 0.0 20291115 2 YIELD 4.0 AAA  500000 45.289 0.089 444.011 0.000
