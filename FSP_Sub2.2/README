@@ -11,6 +11,8 @@ Opening Trading Book - opening trading book position, the file should be in the 
 Closing Trading Book - ending trading book position, the file should be in the same folder as the source code
 
 Instructions
+- download files.tar from course site and unzip it
+- specify the path where the historic files are stored in run.sh 
 - type 'Make Clobber' to clean up previous build
 - type 'Make all' to build the source code
 - type 'sh run.sh'
