@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <cerrno>
 #include <cstdio>
-#include <map>
+#include <vector>
 
 #define SBB_LINE_BUFFER_LENGTH 256
 #define SBB_INSTRUMENT_ID_LENGTH 32
@@ -24,7 +24,7 @@ public:
         YieldRate=0.0;
         Quality="";
         Amount = 0.0;
-        Lgd - 0.0;
+        BenchmarkTicker ="";
         
     } 
     ~SBB_instrument_fields() {};
@@ -52,8 +52,6 @@ public:
     double YieldRate;
     std::string Quality;
     double Amount;
-    double Lgd; //Lgd is added to aid in calculation
-    double PnL; //PnL
     std::string BenchmarkTicker; //bench mark ticker for historic file
 };
 
@@ -82,7 +80,7 @@ public:
     //
     SBB_instrument_fields* get_historic_records(int& length);
     
-    void initialize_treasury_values(std::map<int,double>& treasury_vector); 
+    void initialize_treasury_values(std::vector<double>& treasury_vector); 
     
     //
     // As a convenience to the caller memory is allocated inside this class
