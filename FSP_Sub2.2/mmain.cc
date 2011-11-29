@@ -27,7 +27,6 @@ int main(int argc, const char* arg[])
     string yield = arg[2];
     
     SBB_instrument_input_file inputFile(tradingFile.c_str());
-    SBB_instrument_input_file yieldFile(yield.c_str());
     
     ofstream outputTradingBookFile("tradingbook.txt");
     ofstream outputResultFile("results.txt");
@@ -49,12 +48,16 @@ int main(int argc, const char* arg[])
     BondPrice_calculator* priceCalculator;
     
     int record_count = inputFile.get_record_count();
-    int yield_record_count = yieldFile.get_record_count();
+    
+    SBB_instrument_input_file yieldFile(yield.c_str());
+    
+    int yield_record_count = 0;
+    SBB_instrument_fields* _yc_fields = yieldFile.get_records(yield_record_count);//load the yield file
+    
     
     //printf("input file record count is %d \n", record_count);
     
     SBB_instrument_fields* bonds = inputFile.get_records(record_count); //load the trading book
-    SBB_instrument_fields* _yc_fields = yieldFile.get_records(yield_record_count);//load the yield file
     SBB_bond_ratings bond_ratings;
     
     int largestLongIndex = -1;

@@ -234,7 +234,9 @@ SBB_instrument_input_file::get_historic_records(int& length)
 			exit(1); 
 		}
 		//printf("BenchmarkTicker is:  %s\n", token);
-        _fields_array[non_comments_line_count_read].BenchmarkTicker = token;
+        std::string benchmarkTicker = token;
+        benchmarkTicker = benchmarkTicker.erase(benchmarkTicker.length()-1);
+        _fields_array[non_comments_line_count_read].BenchmarkTicker = benchmarkTicker;
         
         non_comments_line_count_read++;
 	}

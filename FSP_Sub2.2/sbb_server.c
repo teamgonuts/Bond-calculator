@@ -136,6 +136,9 @@ main(int argc, const char* arg[])
         
         SBB_instrument_fields* _opening_book_fields = _opening_trading_file.get_records(_opening_book_records_count); //load the opening trading book
         SBB_instrument_fields* _closing_book_fields = _closing_trading_file.get_records(_closinging_book_records_count); //load the closing trading book
+       
+        //printf("_opening_book_records_count..%d \n", _opening_book_records_count);
+        //printf("_closinging_book_records_count..%d \n", _closinging_book_records_count);
         SBB_instrument_fields* _yc_fields = yieldFile.get_records(yield_record_count);//load the yield file
         
         SBB_bond_ratings bond_ratings;
@@ -171,29 +174,15 @@ main(int argc, const char* arg[])
             _total_opening_portfolio_amount += _opening_book_fields[i].Amount;
             _total_closing_portfolio_amount += _closing_book_fields[i].Amount;
             
-            /*
-             * Get the file name and open the files
-             */
-            std::string security_filename =  _closing_book_fields[i].SecurityID;
-            std::string filename = arg[4] + security_filename + ".txt";
-            SBB_instrument_input_file _historical_file((char*)filename.c_str());
-            
-            int _historical_data_count = 0;
-            SBB_instrument_fields* _historic_data = _historical_file.get_historic_records(_historical_data_count);
-            
-            //loop through 
-            BondPrice_calculator* priceCalculator;
-            double prev_price = 0.0;
-            double prev_yield = 0.0;
-            std::vector<double> _PnL_Vector; //using full pricing
+            /** BASE PRICE CALCULATION ***/
             
             //Calculate the years to matuirty of this security using closing trading book Settlement Date and Maturity Date
+            BondPrice_calculator* priceCalculator;
             int years_to_maturity = priceCalculator->calculate_years_to_maturity(_closing_book_fields[i].SettlementDate, _closing_book_fields[i].MaturityDate);
             //printf("Years to maturity %d \n", years_to_maturity);
             
-            /** BASE PRICE CALCULATION ***/
             double yield_closing = _closing_book_fields[i].YieldRate;
-            if(strcmp(_closing_book_fields[i].RateType.c_str(), "SPREAD") == 0){
+            if(strcmp(_closing_book_fields[i].RateType.c_str(), "SPREAD") == 0){//if RateType is SPREAD
                 
                 double spread = _closing_book_fields[i].YieldRate;
                 int closet_months_to_treasury;
@@ -205,8 +194,8 @@ main(int argc, const char* arg[])
                     bmDate.set_from_yyyymmdd(_closing_book_fields[i].MaturityDate);
                     ymDate.set_from_yyyymmdd(_yc_fields[index].MaturityDate);
                     int months_to_treasury = 0;
+                    
                     if(bmDate <= ymDate){
-                        
                         while (bmDate != ymDate) {
                             bmDate.add_months(1);
                             months_to_treasury++;
@@ -218,6 +207,7 @@ main(int argc, const char* arg[])
                             months_to_treasury++;
                         }
                     }
+                    //months_to_treasury = bmDate.calculate_date_difference(ymDate);
                     if(index == 0){
                         closet_months_to_treasury = months_to_treasury;
                         yield_closing = _yc_fields[index].YieldRate + (spread * 0.01);
@@ -242,10 +232,21 @@ main(int argc, const char* arg[])
                 
             }
             double basePrice = priceCalculator->calculate_price();
-            printf("Base Price is %.3f \n", basePrice);
+            //printf("***** Base Price is %.3f \n", basePrice);
             /*** END OF BASE PRICE CALCULATION **** /
-             
-             /*
+
+            
+            /*
+             * Get the historic data file name and open the files
+             */
+            std::string security_filename =  _closing_book_fields[i].SecurityID;
+            std::string filename = arg[4] + security_filename + ".txt";
+            SBB_instrument_input_file _historical_file((char*)filename.c_str());
+            
+            int _historical_data_count = 0;
+            SBB_instrument_fields* _historic_data = _historical_file.get_historic_records(_historical_data_count);
+            
+            /*
              * Determine whether or not the historical file contain YIELD or SPREAD
              */
             bool _is_yield = true;
@@ -255,10 +256,9 @@ main(int argc, const char* arg[])
                 }else{
                     _is_yield = false;
                     
-                    //now depending on the bench mark, we will initialize corresponding treasury 
                     std::string _treasury_filename = arg[4];
-                    //printf(">>>>> %s \n",_historic_data[0].BenchmarkTicker.c_str());
-                    if(_historic_data[0].BenchmarkTicker.compare("T2\n") == 0){
+                    
+                    if(_historic_data[0].BenchmarkTicker.compare("T2") == 0){
                         //printf("Initializing T2...\n");
                         
                         _treasury_filename += "T2.txt";
@@ -266,7 +266,7 @@ main(int argc, const char* arg[])
                         
                         _treasury_file.initialize_treasury_values(_t2_file); //initialize the historic t2 files data
                         
-                    }else if(strcmp(_historic_data[0].BenchmarkTicker.c_str(), "T5\n") == 0){
+                    }else if(_historic_data[0].BenchmarkTicker.compare("T5") == 0){
                         
                         //printf("Initializing T5...\n");
                         
@@ -275,7 +275,7 @@ main(int argc, const char* arg[])
                         
                         _treasury_file.initialize_treasury_values(_t5_file); //initialize the historic t5 files data
                         
-                    }else if(strcmp(_historic_data[0].BenchmarkTicker.c_str(), "T10\n") == 0){
+                    }else if(_historic_data[0].BenchmarkTicker.compare("T10") == 0){
                         //printf("Initializing T10...\n");
                         
                         _treasury_filename += "T10.txt";
@@ -283,7 +283,7 @@ main(int argc, const char* arg[])
                         
                         _treasury_file.initialize_treasury_values(_t10_file); //initialize the historic t10 files data
                         
-                    }else if(strcmp(_historic_data[0].BenchmarkTicker.c_str(), "T30\n") == 0){
+                    }else if(_historic_data[0].BenchmarkTicker.compare("T30") == 0){
                         //printf("Initializing T30...\n");
                         
                         _treasury_filename += "T30.txt";
@@ -300,7 +300,13 @@ main(int argc, const char* arg[])
             if(bookVector.size() <= 0){
                 bookVector.assign(_historical_data_count,0.0);
             }
-            /** This is calculated according his lecture ***/
+            
+            //loop through 
+            double prev_price = 0.0;
+            double prev_yield = 0.0;
+            std::vector<double> _PnL_Vector; //using full pricing
+            
+            /** VaR calculation according his lecture ***/
             for(int j = 0; j < _historical_data_count ; j++){
                 double yield = 0.0;
                 double bp_diff = 0.0;
@@ -308,39 +314,51 @@ main(int argc, const char* arg[])
                     prev_yield = _historic_data[j].YieldRate;
                 }
                 bp_diff = _historic_data[j].YieldRate - prev_yield;
-                printf("BP change is %.3f \n", bp_diff);
+                //printf("BP change is %.3f \n", bp_diff);
                 
                 if(_is_yield){ //if the historic file is YIELD, then just use that yield rate 
                     yield = yield_closing + bp_diff;
                 }else{ //if the historic file is SPREAD, then get the corresponding YIELD from T2 file, and add the corresponding spread
                     //printf("............ %d \n", _historic_data[j].SettlementDate-1);
-                    if(j > 0){
-                        printf("Treasury difference : %.3f \n",_t2_file[j] - _t2_file[(j-1)]);
-                        printf("yield closing %.3f \n", yield_closing);
+                    
+                    if(j == 0){
+                        yield = 0+ yield_closing + (bp_diff/100);
+                    }else{
+                        //std::string benchmark = _historic_data[j].BenchmarkTicker;
+                        //benchmark = benchmark.erase(benchmark.length()-1);
+                        //printf("Bench mark is %s \n", benchmark);
+                                                    
+                        if(_historic_data[j].BenchmarkTicker.compare("T2") == 0){
+                           yield = (_t2_file[j] - _t2_file[(j-1)])+ yield_closing + (bp_diff/100);
+                            
+                        }else if(_historic_data[j].BenchmarkTicker.compare("T5") == 0){
+                           yield = (_t5_file[j] - _t5_file[(j-1)])+ yield_closing + (bp_diff/100); 
+                            
+                        }else if(_historic_data[j].BenchmarkTicker.compare("T10") == 0){
+                           yield = (_t10_file[j] - _t10_file[(j-1)])+ yield_closing + (bp_diff/100); 
+                            
+                        }else if(_historic_data[j].BenchmarkTicker.compare("T30") == 0){
+                            yield = (_t30_file[j] - _t30_file[(j-1)])+ yield_closing + (bp_diff/100); 
+                        }   
                         
-                        yield = (_t2_file[j] - _t2_file[(j-1)])+ yield_closing + (bp_diff/100);
                     }
                 }
                 
-                printf(".... Yield is %.3f\n", yield);
+                //printf(".... Yield is %.3f\n", yield);
                 
                 if(_closing_book_fields[i].CouponRate == 0.0){
                     
                     priceCalculator = new Zero_Coupon_Calculator(yield, _closing_book_fields[i].Frequency, years_to_maturity);
-                    //std::cout << priceCalculator->yield << " " << priceCalculator->frequency << " " << priceCalculator->yearsToMature << std::endl;
-                    
                 }
                 
                 if(_closing_book_fields[i].CouponRate > 0.0){ 
                     priceCalculator = new Coupon_Bond_Calculator(yield, 
                                                                  _closing_book_fields[i].CouponRate, _closing_book_fields[i].Frequency, years_to_maturity);
-                    //std::cout << priceCalculator->yield << " " << priceCalculator->frequency << " " << priceCalculator->yearsToMature << std::endl;
-                    
                 }
                 
                 double newPrice = priceCalculator->calculate_price();
                 
-                printf("Date: %d %.3f /// Price Change is %.3f \n", _closing_book_fields[i].SettlementDate, newPrice, newPrice - basePrice);
+                //printf("Date: %d %.3f /// Price Change is %.3f \n", _closing_book_fields[i].SettlementDate, newPrice, newPrice - basePrice);
                 
                 _PnL_Vector.push_back((newPrice - basePrice)* _closing_book_fields[i].Amount);
                 

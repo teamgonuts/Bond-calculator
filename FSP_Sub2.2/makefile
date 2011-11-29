@@ -10,7 +10,7 @@ CC = g++
 # where your header files are (. is same directory as the makefile)
 INCLUDES=-I.
 # turn on debugging symbols
-CFLAGS= -g -p -O3 -fno-inline
+CFLAGS= -g -p -O
 # where your object files are (. is the same directory as the makefile)
 LDFLAGS=-L.
 
@@ -89,7 +89,7 @@ $(LIB_RATING_TARGET) : $(LIB_RATING_OBJ)
 	ar $(ARCHIVE_OPTIONS) $(LIB_RATING_TARGET) $(LIB_RATING_OBJ)
 
 $(MAINTARGET) : $(MAINOBJ) $(LIB_TARGET) $(LIB_UTIL_TARGET) $(LIB_IO_TARGET) $(LIB_DATE_TARGET) $(LIB_CAL_TARGET) $(LIB_RATING_TARGET)
-	$(CC) -O $(LDFLAGS) $(MAINOBJ) $(LIB_UTIL_TARGET) $(LIB_IO_TARGET) $(LIB_DATE_TARGET) $(LIB_TARGET) $(LIB_CAL_TARGET) $(LIB_RATING_TARGET) -o $(MAINTARGET)
+	$(CC) -pg -O $(LDFLAGS) $(MAINOBJ) $(LIB_UTIL_TARGET) $(LIB_IO_TARGET) $(LIB_DATE_TARGET) $(LIB_TARGET) $(LIB_CAL_TARGET) $(LIB_RATING_TARGET) -o $(MAINTARGET)
 
 all : util test
 
