@@ -13,7 +13,20 @@ def legalResponse(var):
         return False
 
 
+#==============SPAWN SERVER=====================#
+import os
+import sys
+
+def run(program, *args):
+        pid = os.fork()
+        if not pid:
+                os.execvp(program, (program,) + args)
+        return os.wait()[0]
+
+run("sh", "run.sh")
+
 #==============CODE===========================#
+
 HOST = socket.gethostname()
 PORT = 0x1234
 MSGSIZE = 8192
