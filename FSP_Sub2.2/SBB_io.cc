@@ -50,7 +50,7 @@ void
 SBB_instrument_input_file::close_file()
 {
 	if (std::fclose(_file)) {
-		fprintf(stderr,"flose failed on file %s errno: %d\n", 
+		fprintf(stderr,"2. flose failed on file %s errno: %d\n", 
                 _file, errno);
 	}
 }
@@ -59,7 +59,6 @@ SBB_instrument_fields*
 SBB_instrument_input_file::get_records(int& length) 
 {
 	length = get_record_count();//get total number of record
-    printf("Record counts : %d",length);
     SBB_bond_ratings bond_ratings;
 
 	_fields_array = new SBB_instrument_fields[length];
@@ -154,8 +153,6 @@ SBB_instrument_input_file::get_records(int& length)
         _fields_array[non_comments_line_count_read].Quality=token;
 		//strcpy(_bonds_array[non_comments_line_count_read].Quality,token);	
         
-        //Get LGD for the given quality
-        _fields_array[non_comments_line_count_read].Lgd = bond_ratings.LGD_given_SnP_Fitch(token);
         
         //Amount
 		token = strtok(NULL," ");
@@ -179,7 +176,7 @@ SBB_instrument_fields*
 SBB_instrument_input_file::get_historic_records(int& length) 
 {
 	length = get_record_count();//get total number of record
-    printf("Historical Record counts : %d",length);
+    //printf("Historical Record counts : %d",length);
     
 	_fields_array = new SBB_instrument_fields[length];
     
@@ -237,18 +234,18 @@ SBB_instrument_input_file::get_historic_records(int& length)
 			exit(1); 
 		}
 		//printf("BenchmarkTicker is:  %s\n", token);
-		_fields_array[non_comments_line_count_read].BenchmarkTicker = token;
+        _fields_array[non_comments_line_count_read].BenchmarkTicker = token;
         
         non_comments_line_count_read++;
 	}
     
-	printf("SBB lines read: %d \n", non_comments_line_count_read);
+	//printf("SBB lines read: %d \n", non_comments_line_count_read);
     
 	return _fields_array;
 }
 
 void
-SBB_instrument_input_file::initialize_treasury_values(std::map<int,double>& treasury_vector) 
+SBB_instrument_input_file::initialize_treasury_values( std::vector<double>& treasury_vector) 
 {
     
     int comment_count = 0;
@@ -277,24 +274,19 @@ SBB_instrument_input_file::initialize_treasury_values(std::map<int,double>& trea
 		}
 		//printf("SettlementDate: %s\n", token); 
         _settlement_date = atoi(token);
-		//_fields_array[non_comments_line_count_read].SettlementDate = atoi(token);
-        
+	    
 		// RateType
 		token = strtok(NULL," ");
-		//printf("RateType: %s\n", token);
-        //_fields_array[non_comments_line_count_read].RateType = token;
-		//strcpy(_bonds_array[non_comments_line_count_read].RateType,token);				
-        
+	    
 		// Yield/Rate (later we will load in spread and a string token of an OTR. Also will have a separate file
         token = strtok(NULL," ");
 		if(NULL == token ) { 
 			fprintf(stderr,"2. line parsing failed on buf: %s\n", _line_buf); 
 			exit(1); 
 		}
-		//printf("YieldRate is:  %s\n", token);
-        treasury_yield = atof(token);
-		//_fields_array[non_comments_line_count_read].YieldRate = atof(token);
-        treasury_vector[_settlement_date] = treasury_yield;
+	    treasury_yield = atof(token);
+	
+        treasury_vector.push_back(treasury_yield);
         
         non_comments_line_count_read++;
 	}

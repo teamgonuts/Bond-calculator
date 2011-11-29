@@ -81,8 +81,8 @@ int BondPrice_calculator::calculate_years_to_maturity(int SettlementDate, int Ma
     sDate.set_from_yyyymmdd(SettlementDate);
     mDate.set_from_yyyymmdd(MaturityDate);
     int years_to_maturity = 0;
-    printf("Settlement Date %d \n", SettlementDate);
-    printf("Maturity Date %d \n", MaturityDate);
+    //printf("Settlement Date %d \n", SettlementDate);
+    //printf("Maturity Date %d \n", MaturityDate);
     while (sDate != mDate) {
 		mDate.add_months(-12);
 		years_to_maturity++;
