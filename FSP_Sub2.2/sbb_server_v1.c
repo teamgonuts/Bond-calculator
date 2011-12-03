@@ -257,8 +257,8 @@ main(int argc, const char* arg[])
                     
                     //now depending on the bench mark, we will initialize corresponding treasury 
                     std::string _treasury_filename = arg[4];
-                    //printf(">>>>> %s \n",_historic_data[0].BenchmarkTicker.c_str());
-                    if(_historic_data[0].BenchmarkTicker.compare("T2\n") == 0){
+                    
+                    if(_historic_data[0].BenchmarkTicker.compare("T2") == 0){
                         //printf("Initializing T2...\n");
                         
                         _treasury_filename += "T2.txt";
@@ -266,7 +266,7 @@ main(int argc, const char* arg[])
                         
                         _treasury_file.initialize_treasury_values(_t2_file); //initialize the historic t2 files data
                         
-                    }else if(strcmp(_historic_data[0].BenchmarkTicker.c_str(), "T5\n") == 0){
+                    }else if(_historic_data[0].BenchmarkTicker.compare("T5") == 0){
                         
                         //printf("Initializing T5...\n");
                         
@@ -275,7 +275,7 @@ main(int argc, const char* arg[])
                         
                         _treasury_file.initialize_treasury_values(_t5_file); //initialize the historic t5 files data
                         
-                    }else if(strcmp(_historic_data[0].BenchmarkTicker.c_str(), "T10\n") == 0){
+                    }else if(_historic_data[0].BenchmarkTicker.compare("T10") == 0){
                         //printf("Initializing T10...\n");
                         
                         _treasury_filename += "T10.txt";
@@ -283,7 +283,7 @@ main(int argc, const char* arg[])
                         
                         _treasury_file.initialize_treasury_values(_t10_file); //initialize the historic t10 files data
                         
-                    }else if(strcmp(_historic_data[0].BenchmarkTicker.c_str(), "T30\n") == 0){
+                    }else if(_historic_data[0].BenchmarkTicker.compare("T30") == 0){
                         //printf("Initializing T30...\n");
                         
                         _treasury_filename += "T30.txt";
@@ -291,6 +291,7 @@ main(int argc, const char* arg[])
                         
                         _treasury_file.initialize_treasury_values(_t30_file); //initialize the historic t30 files data
                     }   
+
                 }
             }
             
@@ -300,99 +301,50 @@ main(int argc, const char* arg[])
             if(bookVector.size() <= 0){
                 bookVector.assign(_historical_data_count,0.0);
             }
-            bool useThis = false;
+            
             /****** This is calculated using our original price calculation **************/
-            if(useThis){
-                for(int j = 0; j < _historical_data_count ; j++){
-                    double yield = 0.0;
+            for(int j = 0; j < _historical_data_count ; j++){
+                double yield = 0.0;
+                
+                if(_is_yield){ //if the historic file is YIELD, then just use that yield rate 
+                    yield = _historic_data[j].YieldRate;
+                }else{ //if the historic file is SPREAD, then get the corresponding YIELD from T2 file, and add the corresponding spread
+                    yield = _t2_file[j]+(_historic_data[j].YieldRate/100);
+                }
+                
+                //printf("Yield is %.3f\n", yield);
+                
+                if(_closing_book_fields[i].CouponRate == 0.0){
                     
-                    if(_is_yield){ //if the historic file is YIELD, then just use that yield rate 
-                        yield = _historic_data[j].YieldRate;
-                    }else{ //if the historic file is SPREAD, then get the corresponding YIELD from T2 file, and add the corresponding spread
-                        yield = _t2_file[j]+(_historic_data[j].YieldRate/100);
-                    }
+                    priceCalculator = new Zero_Coupon_Calculator(yield, _closing_book_fields[i].Frequency, years_to_maturity);
+                    //std::cout << priceCalculator->yield << " " << priceCalculator->frequency << " " << priceCalculator->yearsToMature << std::endl;
                     
-                    //printf("Yield is %.3f\n", yield);
+                }
+                
+                if(_closing_book_fields[i].CouponRate > 0.0){ 
+                    priceCalculator = new Coupon_Bond_Calculator(yield, 
+                                                                 _closing_book_fields[i].CouponRate, _closing_book_fields[i].Frequency, years_to_maturity);
+                    //std::cout << priceCalculator->yield << " " << priceCalculator->frequency << " " << priceCalculator->yearsToMature << std::endl;
                     
-                    if(_closing_book_fields[i].CouponRate == 0.0){
-                        
-                        priceCalculator = new Zero_Coupon_Calculator(yield, _closing_book_fields[i].Frequency, years_to_maturity);
-                        //std::cout << priceCalculator->yield << " " << priceCalculator->frequency << " " << priceCalculator->yearsToMature << std::endl;
-                        
-                    }
-                    
-                    if(_closing_book_fields[i].CouponRate > 0.0){ 
-                        priceCalculator = new Coupon_Bond_Calculator(yield, 
-                                                                     _closing_book_fields[i].CouponRate, _closing_book_fields[i].Frequency, years_to_maturity);
-                        //std::cout << priceCalculator->yield << " " << priceCalculator->frequency << " " << priceCalculator->yearsToMature << std::endl;
-                        
-                    }
-                    
-                    double price = priceCalculator->calculate_price();
-                    if( j == 0){
-                        prev_price = price;
-                    }
-                    //printf("Date: %d %.3f /// Price Change is %.3f \n", _closing_book_fields[i].SettlementDate, price, price - prev_price);
-                    
-                    _PnL_Vector.push_back((price - prev_price)* _closing_book_fields[i].Amount);
-                    
+                }
+                
+                double price = priceCalculator->calculate_price();
+                if( j == 0){
                     prev_price = price;
                 }
-            }else{
+                //printf("Date: %d %.3f /// Price Change is %.3f \n", _closing_book_fields[i].SettlementDate, price, price - prev_price);
                 
-                /** This is calculated according his lecture ***/
-                for(int j = 0; j < _historical_data_count ; j++){
-                    double yield = 0.0;
-                    double bp_diff = 0.0;
-                    if( j == 0){
-                        prev_yield = _historic_data[j].YieldRate;
-                    }
-                    bp_diff = _historic_data[j].YieldRate - prev_yield;
-                    printf("BP change is %.3f \n", bp_diff);
-                    
-                    if(_is_yield){ //if the historic file is YIELD, then just use that yield rate 
-                        yield = yield_closing + bp_diff;
-                    }else{ //if the historic file is SPREAD, then get the corresponding YIELD from T2 file, and add the corresponding spread
-                        //printf("............ %d \n", _historic_data[j].SettlementDate-1);
-                        if(j > 0){
-                            printf("Treasury difference : %.3f \n",_t2_file[j] - _t2_file[(j-1)]);
-                            printf("yield closing %.3f \n", yield_closing);
-                            
-                            yield = (_t2_file[j] - _t2_file[(j-1)])+ yield_closing + (bp_diff/100);
-                        }
-                    }
-                    
-                    printf(".... Yield is %.3f\n", yield);
-                    
-                    if(_closing_book_fields[i].CouponRate == 0.0){
-                        
-                        priceCalculator = new Zero_Coupon_Calculator(yield, _closing_book_fields[i].Frequency, years_to_maturity);
-                        //std::cout << priceCalculator->yield << " " << priceCalculator->frequency << " " << priceCalculator->yearsToMature << std::endl;
-                        
-                    }
-                    
-                    if(_closing_book_fields[i].CouponRate > 0.0){ 
-                        priceCalculator = new Coupon_Bond_Calculator(yield, 
-                                                                     _closing_book_fields[i].CouponRate, _closing_book_fields[i].Frequency, years_to_maturity);
-                        //std::cout << priceCalculator->yield << " " << priceCalculator->frequency << " " << priceCalculator->yearsToMature << std::endl;
-                        
-                    }
-                    
-                    double newPrice = priceCalculator->calculate_price();
-                    
-                    printf("Date: %d %.3f /// Price Change is %.3f \n", _closing_book_fields[i].SettlementDate, newPrice, newPrice - basePrice);
-                    
-                    _PnL_Vector.push_back((newPrice - basePrice)* _closing_book_fields[i].Amount);
-                    
-                    prev_price = newPrice;
-                    prev_yield = _historic_data[j].YieldRate;
-                }
+                _PnL_Vector.push_back((price - prev_price)/100* _closing_book_fields[i].Amount);
                 
-                for(int i = 0; i < _PnL_Vector.size() ; i++){
-                    printf(">>>>>> %.3f \n", _PnL_Vector[i]);
-                }
+                prev_price = price;
             }
-            _historical_file.free_records(); //free the records for the historic data
+            
+            /*
+             for(int i = 0; i < _PnL_Vector.size() ; i++){
+             printf(">>>>>> %.3f \n", _PnL_Vector[i]);
+             }
+             }*/
+            //_historical_file.free_records(); //free the records for the historic data
             //_historical_file.close_file();
             
             //printf("######## %s ########### \n", _closing_book_fields[i].SecurityID);
@@ -419,7 +371,7 @@ main(int argc, const char* arg[])
         /* 
 		 * ack back to the client 
 		 */
-        sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", _VaR, _lgd_change,_portfolio_amt_change, realtime, usertime, systemtime);
+        sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", _VaR/1000, _lgd_change,_portfolio_amt_change, realtime, usertime, systemtime);
         
 		//strcpy(msg," this is the server message response!");
 		if (send(sd_current, msg, strlen(msg), 0) == -1) {
