@@ -360,7 +360,7 @@ main(int argc, const char* arg[])
                 
                 //printf("Date: %d %.3f /// Price Change is %.3f \n", _closing_book_fields[i].SettlementDate, newPrice, newPrice - basePrice);
                 
-                _PnL_Vector.push_back((newPrice - basePrice)* _closing_book_fields[i].Amount);
+                _PnL_Vector.push_back((newPrice - basePrice)/100* _closing_book_fields[i].Amount);
                 
                 prev_price = newPrice;
                 prev_yield = _historic_data[j].YieldRate;
