@@ -7,7 +7,6 @@ import sys
 
 #==============SPAWN SERVER=====================#
 
-'''
 def run(program, *args):
     pid = os.fork()
     if not pid:
@@ -21,7 +20,7 @@ run("sh", "run.sh")
 
 #==============CODE===========================#
 
-'''
+
 HOST = socket.gethostname()
 PORT = 0x1234
 MSGSIZE = 8192
