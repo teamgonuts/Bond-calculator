@@ -1,20 +1,23 @@
 Calvin Hawkes - calvinhawkes@gmail.com
 Aye Sandar Moe - ayesandarmoe@gmail.com
 
-Output 
-VaR_Ratings - VaR of closing portfolio given confidence interval of 99%	
-Total portfolio LGD change due to ratings downgrade/upgrade
-Total Portfolio Amount change(NOT "Market Value") from start to end of day
+Output : 3 numbers in 3 decimals in the following order:
+1. VaR_Ratings - VaR of closing portfolio given confidence interval of 99%	
+2. VaR based on yield change
+3. VaR based on change in treasury yield
 
-Input - both trading books are specified in run.sh
-Opening Trading Book - opening trading book position, the file should be in the same folder as the source code
-Closing Trading Book - ending trading book position, the file should be in the same folder as the source code
+Inputs
+The following four inputs need to be specified in run.sh:
+* HISTORIC_DATA_FILEPATH --> file path where the historic files are
+* DATA_OPENING_INPUT_FILE --> opening trading book
+* DATA_CLOSING_INPUT_FILE --> closing trading book
+* YC_INPUT_FILE --> Treasury yield curve file
+
 
 Instructions
 - download files.tar from course site and unzip it
 - specify the path where the historic files are stored in run.sh 
 - type 'Make Clobber' to clean up previous build
 - type 'Make all' to build the source code
-- type 'sh run.sh'
-- open another tab, navigate to the folder where the client.py code is
-- type 'python client.py'
+- make all necessary input files changes as specified above
+- type 'python client.py' - our python client should start the server automatically
