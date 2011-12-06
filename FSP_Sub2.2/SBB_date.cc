@@ -89,6 +89,35 @@ SBB_date::add_months(int number)
 	}
 }
 
+//calculate date difference between the two
+int
+SBB_date::calculate_date_difference(SBB_date d2) 
+{
+    //std::cout << get_yyyymmdd() << std::endl;
+    //std::cout << d2.get_yyyymmdd() << std::endl;
+    
+    short year1 = get_year();
+    short year2 = d2.get_year();
+    
+    int months = fabs(year1-year2) * 12;
+    
+    //int _day = get_yyyymmdd() % 100 
+    short _month1 = (get_yyyymmdd() / 100 ) % 100;
+    short _month2 = (d2.get_yyyymmdd() / 100 ) % 100;
+   
+    //std::cout << _month1 << std::endl;
+    //std::cout << _month2 << std::endl;
+    
+    
+    
+    months += (_month2 - _month1 );
+    //std::cout<< " difference in month is " << months <<std::endl;
+    return months;
+    
+    
+	
+}
+
 int 
 SBB_date::is_valid()
 {
