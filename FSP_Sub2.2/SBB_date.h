@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <math.h>
 
 #define SBB_FIRST_VALID_YEAR 1900
 #define SBB_ERROR -1
@@ -86,6 +87,14 @@ public:
     
     void add_months(int number); // -6 passed to go backwards a semi-annual period
     int is_valid();
+    
+    char get_month(){ return _month;    }
+    
+    char get_day(){ return _day;    }
+    short get_year(){ return _year; }
+    
+    int calculate_date_difference(SBB_date d2); 
+    
     
 private:
     char _month;
