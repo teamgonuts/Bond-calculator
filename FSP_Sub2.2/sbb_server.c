@@ -28,6 +28,21 @@ int calculateIndex(double confidenceInterval, int count){
     return indexIntoPnLVector;
 }
 
+
+struct VaR{
+    double total_VaR;//total VaR
+    double creditRisk_component;//credit risk component of VaR
+    double interestRisk_component;//interest risk component of VaR
+    
+};
+
+struct _by_totalVar{
+    bool operator()(VaR const &a, VaR const &b) { 
+        return a.total_VaR < b.total_VaR;
+    }
+    
+};
+
 main(int argc, const char* arg[])
 {
 	/* 
@@ -125,7 +140,7 @@ main(int argc, const char* arg[])
         timer.start_clock();
         
         
-        SBB_instrument_input_file _opening_trading_file((char*)arg[1]);//get opening trading book file name from run.sh
+        //SBB_instrument_input_file _opening_trading_file((char*)arg[1]);//get opening trading book file name from run.sh
         SBB_instrument_input_file _closing_trading_file((char*)arg[2]);//get closing trading book file name from run.sh
         SBB_instrument_input_file yieldFile((char*)arg[3]);//get yieldcurve.txt from run.sh
         
@@ -134,45 +149,46 @@ main(int argc, const char* arg[])
         int yield_record_count = 0;
         
         
-        SBB_instrument_fields* _opening_book_fields = _opening_trading_file.get_records(_opening_book_records_count); //load the opening trading book
+        //SBB_instrument_fields* _opening_book_fields = _opening_trading_file.get_records(_opening_book_records_count); //load the opening trading book
         SBB_instrument_fields* _closing_book_fields = _closing_trading_file.get_records(_closinging_book_records_count); //load the closing trading book
-       
+        
         //printf("_opening_book_records_count..%d \n", _opening_book_records_count);
         //printf("_closinging_book_records_count..%d \n", _closinging_book_records_count);
         SBB_instrument_fields* _yc_fields = yieldFile.get_records(yield_record_count);//load the yield file
         
+        /*
         SBB_bond_ratings bond_ratings;
         
         double _total_opening_lgd_amount_adjusted = 0.0; //total portfolio LGD at the start of the day aka opening trading book
         double _total_closing_lgd_amount_adjusted = 0.0; //total portfolio LGD at the end of the day aka closing trading book
         double _total_opening_portfolio_amount = 0.0; //total portfolio amount at the start of the day
         double _total_closing_portfolio_amount = 0.0; //total portfolio amount at the end of the day
-        
+        */
         
         std::vector<double> _t2_file; //create a map that holds the treasury data for T2
         std::vector<double> _t5_file; //create a map that holds the treasury data for T5
         std::vector<double> _t10_file; //create a map that holds the treasury data for T10
         std::vector<double> _t30_file; //create a map that holds the treasury data for T30
         
-        std::vector<double> bookVector;//trading book vector for PnL calculation
+        std::vector<VaR> bookVector;//trading book vector for PnL calculation
         
         for(int i = 0 ; i < _closinging_book_records_count ; i++){
             
             
             
             //Get LGD from start of the day
-            _total_opening_lgd_amount_adjusted += (bond_ratings.LGD_given_SnP_Fitch(_opening_book_fields[i].Quality.c_str()) * _opening_book_fields[i].Amount); //calculate total LGD by multiplying LGD with the amount
+            //_total_opening_lgd_amount_adjusted += (bond_ratings.LGD_given_SnP_Fitch(_opening_book_fields[i].Quality.c_str()) * _opening_book_fields[i].Amount); //calculate total LGD by multiplying LGD with the amount
             
             //Get LGD from end of the day
-            _total_closing_lgd_amount_adjusted += (bond_ratings.LGD_given_SnP_Fitch(_closing_book_fields[i].Quality.c_str())  * _closing_book_fields[i].Amount);
+            //_total_closing_lgd_amount_adjusted += (bond_ratings.LGD_given_SnP_Fitch(_closing_book_fields[i].Quality.c_str())  * _closing_book_fields[i].Amount);
             
             //this is temporary output for debugging
             //printf("Opening lgd amount : %s %.3f %.3f \n",_opening_book_fields[i].SecurityID, _opening_bond_lgd, _opening_bond_lgd * _opening_book_fields[i].Amount);
             //printf("Closing lgd amount : %s %.3f %.3f \n",_closing_book_fields[i].SecurityID, _closing_bond_lgd, _closing_bond_lgd * _closing_book_fields[i].Amount);
             
             //Get total portfolio amount for beginning of the day and end of the day
-            _total_opening_portfolio_amount += _opening_book_fields[i].Amount;
-            _total_closing_portfolio_amount += _closing_book_fields[i].Amount;
+           // _total_opening_portfolio_amount += _opening_book_fields[i].Amount;
+            //_total_closing_portfolio_amount += _closing_book_fields[i].Amount;
             
             /** BASE PRICE CALCULATION ***/
             
@@ -194,7 +210,7 @@ main(int argc, const char* arg[])
                     bmDate.set_from_yyyymmdd(_closing_book_fields[i].MaturityDate);
                     ymDate.set_from_yyyymmdd(_yc_fields[index].MaturityDate);
                     int months_to_treasury = 0;
-                    
+                    /*
                     if(bmDate <= ymDate){
                         while (bmDate != ymDate) {
                             bmDate.add_months(1);
@@ -206,8 +222,8 @@ main(int argc, const char* arg[])
                             bmDate.add_months(-1);
                             months_to_treasury++;
                         }
-                    }
-                    //months_to_treasury = bmDate.calculate_date_difference(ymDate);
+                    }*/
+                    months_to_treasury = bmDate.calculate_date_difference(ymDate);
                     if(index == 0){
                         closet_months_to_treasury = months_to_treasury;
                         yield_closing = _yc_fields[index].YieldRate + (spread * 0.01);
@@ -234,9 +250,9 @@ main(int argc, const char* arg[])
             double basePrice = priceCalculator->calculate_price();
             //printf("***** Base Price is %.3f \n", basePrice);
             /*** END OF BASE PRICE CALCULATION **** /
-
-            
-            /*
+             
+             
+             /*
              * Get the historic data file name and open the files
              */
             std::string security_filename =  _closing_book_fields[i].SecurityID;
@@ -296,20 +312,22 @@ main(int argc, const char* arg[])
             
             /*
              * If this is the first time, then initalize our trading book vector to 0.0 for calculation,
+             
+             if(bookVector.size() <= 0){
+             bookVector.assign(_historical_data_count,0.0);
+             }
              */
-            if(bookVector.size() <= 0){
-                bookVector.assign(_historical_data_count,0.0);
-            }
-            
             //loop through 
             double prev_price = 0.0;
             double prev_yield = 0.0;
-            std::vector<double> _PnL_Vector; //using full pricing
+            std::vector<VaR> _PnL_Vector; //using full pricing
             
             /** VaR calculation according his lecture ***/
             for(int j = 0; j < _historical_data_count ; j++){
                 double yield = 0.0;
                 double bp_diff = 0.0;
+                double yield_diff = 0.0;                            
+                
                 if( j == 0){
                     prev_yield = _historic_data[j].YieldRate;
                 }
@@ -327,19 +345,22 @@ main(int argc, const char* arg[])
                         //std::string benchmark = _historic_data[j].BenchmarkTicker;
                         //benchmark = benchmark.erase(benchmark.length()-1);
                         //printf("Bench mark is %s \n", benchmark);
-                                                    
                         if(_historic_data[j].BenchmarkTicker.compare("T2") == 0){
-                           yield = (_t2_file[j] - _t2_file[(j-1)])+ yield_closing + (bp_diff/100);
+                            yield_diff = _t2_file[j] - _t2_file[(j-1)];
+                            //yield = (_t2_file[j] - _t2_file[(j-1)])+ yield_closing + (bp_diff/100);
                             
                         }else if(_historic_data[j].BenchmarkTicker.compare("T5") == 0){
-                           yield = (_t5_file[j] - _t5_file[(j-1)])+ yield_closing + (bp_diff/100); 
+                            yield_diff = _t5_file[j] - _t5_file[(j-1)];
+                            //yield = (_t5_file[j] - _t5_file[(j-1)])+ yield_closing + (bp_diff/100); 
                             
                         }else if(_historic_data[j].BenchmarkTicker.compare("T10") == 0){
-                           yield = (_t10_file[j] - _t10_file[(j-1)])+ yield_closing + (bp_diff/100); 
+                            yield_diff = _t10_file[j] - _t10_file[(j-1)];
+                            //yield = (_t10_file[j] - _t10_file[(j-1)])+ yield_closing + (bp_diff/100); 
                             
                         }else if(_historic_data[j].BenchmarkTicker.compare("T30") == 0){
-                            yield = (_t30_file[j] - _t30_file[(j-1)])+ yield_closing + (bp_diff/100); 
-                        }   
+                            yield_diff = _t30_file[j] - _t30_file[(j-1)];
+                        }  
+                        yield = yield_diff + yield_closing + (bp_diff/100); 
                         
                     }
                 }
@@ -357,38 +378,44 @@ main(int argc, const char* arg[])
                 }
                 
                 double newPrice = priceCalculator->calculate_price();
+                VaR v;
+                v.total_VaR = (newPrice - basePrice)/100* _closing_book_fields[i].Amount;
+                v.creditRisk_component = bp_diff; //please note that this is in decimal
+                v.interestRisk_component = yield_diff;
+                /*printf("Date: %d  /// Total VaR is %.3f  Credit component is %.3f  Interest component is %.3f \n", 
+                       _closing_book_fields[i].SettlementDate, v.total_VaR, 
+                       (v.creditRisk_component/(v.interestRisk_component + v.creditRisk_component)) * v.total_VaR,  
+                       (v.interestRisk_component/(v.interestRisk_component + v.creditRisk_component)) * v.total_VaR);*/
                 
-                //printf("Date: %d %.3f /// Price Change is %.3f \n", _closing_book_fields[i].SettlementDate, newPrice, newPrice - basePrice);
-                
-                _PnL_Vector.push_back((newPrice - basePrice)/100* _closing_book_fields[i].Amount);
+                _PnL_Vector.push_back(v);
                 
                 prev_price = newPrice;
                 prev_yield = _historic_data[j].YieldRate;
             }
-            /*
-             for(int i = 0; i < _PnL_Vector.size() ; i++){
-             printf(">>>>>> %.3f \n", _PnL_Vector[i]);
-             }*/
             _historical_file.free_records(); //free the records for the historic data
             //_historical_file.close_file();
             
-            //printf("######## %s ########### \n", _closing_book_fields[i].SecurityID);
-            for(int tindex = 0; tindex < _PnL_Vector.size(); tindex++){
-                //printf("%.3f %.3f \n", _PnL_Vector[tindex], bookVector[tindex]);
-                //double totalPnL = bookVector[tindex] + _PnL_Vector[tindex];
-                bookVector[tindex] = bookVector[tindex] + _PnL_Vector[tindex];
+            
+            if(i == 0){
+                for(int tindex = 0; tindex < _PnL_Vector.size(); tindex++){
+                    bookVector.push_back(_PnL_Vector[tindex]);
+                }
+            }else{
+                for(int tindex = 0; tindex < _PnL_Vector.size(); tindex++){
+                    bookVector[tindex].total_VaR = bookVector[tindex].total_VaR + _PnL_Vector[tindex].total_VaR;
+                }
             }
             
         }
-        sort(bookVector.begin(), bookVector.end());
-        double _VaR = bookVector[calculateIndex(99, bookVector.size())];
+        sort(bookVector.begin(), bookVector.end(),_by_totalVar());
+        VaR _var = bookVector[calculateIndex(99, bookVector.size())];
         
         //printf("99 percent confidence interval for total number of %d of %.3f \n", bookVector.size(),_VaR);
         
-        double _lgd_change = _total_opening_lgd_amount_adjusted - _total_closing_lgd_amount_adjusted;
+        //double _lgd_change = _total_opening_lgd_amount_adjusted - _total_closing_lgd_amount_adjusted;
         //printf("LGD change : %.3f\n", _lgd_change);
         
-        double _portfolio_amt_change = _total_opening_portfolio_amount - _total_closing_portfolio_amount;
+        //double _portfolio_amt_change = _total_opening_portfolio_amount - _total_closing_portfolio_amount;
         //printf("Portfolio Amount change : %.3f\n", _portfolio_amt_change);
         
         
@@ -396,7 +423,9 @@ main(int argc, const char* arg[])
         /* 
          * ack back to the client 
          */
-        sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", _VaR/1000, _lgd_change,_portfolio_amt_change, realtime, usertime, systemtime);
+        sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", _var.total_VaR/1000, 
+                 _var.total_VaR*(_var.creditRisk_component/(_var.interestRisk_component+_var.creditRisk_component))/1000,
+                 _var.total_VaR*(_var.interestRisk_component/(_var.interestRisk_component+_var.creditRisk_component))/1000, realtime, usertime, systemtime);
         
         //strcpy(msg," this is the server message response!");
         if (send(sd_current, msg, strlen(msg), 0) == -1) {
@@ -406,17 +435,17 @@ main(int argc, const char* arg[])
     }
     
     if( 0 == ret ) {
-        printf("SBB ciient exited...\n");
+        printf("SBB client exited...\n");
         /* For TCP sockets	
          * the return value 0 means the peer has closed its half side of the connection 
          */
-    }
-    else if( -1 == ret ) {
+        close(sd_current); 
+
+    }else if( -1 == ret ) {
         fprintf(stderr,"SBB recv(...) returned failed - errno: %d exiting...\n", errno);	
         exit(1);
     }
     
-    close(sd_current); 
     close(sd);
 }
 
