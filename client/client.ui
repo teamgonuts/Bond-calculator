@@ -60,11 +60,13 @@
         <bool>true</bool>
        </property>
        <property name="rowCount">
-        <number>14</number>
+        <number>16</number>
        </property>
        <property name="columnCount">
         <number>10</number>
        </property>
+       <row/>
+       <row/>
        <row/>
        <row/>
        <row/>
@@ -225,10 +227,10 @@
       <widget class="QTableWidget" name="riskTable">
        <property name="geometry">
         <rect>
-         <x>50</x>
+         <x>0</x>
          <y>0</y>
-         <width>979</width>
-         <height>359</height>
+         <width>1061</width>
+         <height>375</height>
         </rect>
        </property>
        <property name="sortingEnabled">
@@ -355,7 +357,7 @@
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>360</y>
+         <y>390</y>
          <width>325</width>
          <height>27</height>
         </rect>
@@ -368,7 +370,7 @@
        <property name="geometry">
         <rect>
          <x>380</x>
-         <y>360</y>
+         <y>390</y>
          <width>325</width>
          <height>27</height>
         </rect>
@@ -381,7 +383,7 @@
        <property name="geometry">
         <rect>
          <x>710</x>
-         <y>360</y>
+         <y>390</y>
          <width>325</width>
          <height>27</height>
         </rect>
