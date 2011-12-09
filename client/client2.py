@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'client.ui'
 #
-# Created: Fri Dec  9 12:41:46 2011
+# Created: Fri Dec  9 12:49:54 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -247,57 +247,11 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        
-    def initializeTable(self):
-        #Setting Table Headers
-        headers = QtCore.QStringList()
-        headers.append("Ticker")
-        headers.append("Notional")
-        headers.append("Risk")
-        headers.append("LGD")
-        headers.append("Notional")
-        headers.append("Risk")
-        headers.append("LGD")
-        headers.append("Notional")
-        headers.append("Risk")
-        headers.append("LGD")
-        self.changeTable.setHorizontalHeaderLabels(headers)
-        riskHeaders = QtCore.QStringList()
-        riskHeaders.append("Book")
-        riskHeaders.append("Risk")
-        riskHeaders.append("Market Val")
-        riskHeaders.append("Risk")
-        riskHeaders.append("Market Val")
-        riskHeaders.append("Risk")
-        riskHeaders.append("Market Val")
-        riskHeaders.append("Risk")
-        riskHeaders.append("Market Val")
-        self.riskTable.setHorizontalHeaderLabels(riskHeaders)
-        #Setting Risk Initial Values
-        #2YR - 5YR - 10YR - 30YR
-        self.riskTable.setSpan(0, 1, 1, 2)
-        self.riskTable.setSpan(0, 3, 1, 2)
-        self.riskTable.setSpan(0, 5, 1, 2)
-        self.riskTable.setSpan(0, 7, 1, 2)
-        
-        twoYR = QtGui.QTableWidgetItem("2 YR")
-        twoYR.setBackgroundColor(QtGui.QColor(255,204,0))
-        twoYR.setTextAlignment(QtCore.Qt.AlignHCenter)
-        twoYR.setTextAlignment(QtCore.Qt.AlignVCenter)
-  
-        self.riskTable.setItem(0, 1, twoYR)
-        fiveYR = QtGui.QTableWidgetItem("5 YR")
-        self.riskTable.setItem(0, 3, fiveYR)
-        tenYR = QtGui.QTableWidgetItem("10 YR")
-        self.riskTable.setItem(0, 5, tenYR)
-        thirtyYR = QtGui.QTableWidgetItem("30 YR")
-        self.riskTable.setItem(0, 7, thirtyYR)
-
-        
-        #Setting Initial Cell Values
 
     def retranslateUi(self, Form):
+        self.changeTable.setSortingEnabled(True)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("Form", "Daily Change", None, QtGui.QApplication.UnicodeUTF8))
+        self.riskTable.setSortingEnabled(True)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("Form", "Risk", None, QtGui.QApplication.UnicodeUTF8))
 
 
@@ -307,7 +261,6 @@ if __name__ == "__main__":
     Form = QtGui.QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)
-    ui.initializeTable()
     Form.show()
     sys.exit(app.exec_())
 

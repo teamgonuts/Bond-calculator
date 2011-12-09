@@ -281,7 +281,7 @@ class Ui_Form(object):
         self.riskTable.setSpan(0, 7, 1, 2)
         
         twoYR = QtGui.QTableWidgetItem("2 YR")
-        twoYR.setBackgroundColor(QtGui.QColor(255,204,0))
+        twoYR.setBackgroundColor(QtGui.QColor(127,255,0))
         twoYR.setTextAlignment(QtCore.Qt.AlignHCenter)
         twoYR.setTextAlignment(QtCore.Qt.AlignVCenter)
   

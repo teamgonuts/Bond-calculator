@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'client.ui'
 #
-# Created: Fri Dec  9 12:41:46 2011
+# Created: Fri Dec  9 12:44:18 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,7 +18,7 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
         Form.resize(1090, 621)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
@@ -55,11 +55,11 @@ class Ui_Form(object):
         self.scrollAreaWidgetContents = QtGui.QWidget()
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1065, 485))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
-        self.changeTable = QtGui.QTableWidget(self.scrollAreaWidgetContents)
-        self.changeTable.setGeometry(QtCore.QRect(0, 0, 1051, 421))
-        self.changeTable.setRowCount(14)
-        self.changeTable.setColumnCount(10)
-        self.changeTable.setObjectName(_fromUtf8("changeTable"))
+        self.tableWidget = QtGui.QTableWidget(self.scrollAreaWidgetContents)
+        self.tableWidget.setGeometry(QtCore.QRect(0, 0, 1051, 421))
+        self.tableWidget.setRowCount(14)
+        self.tableWidget.setColumnCount(10)
+        self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
         self.label_15 = QtGui.QLabel(self.scrollAreaWidgetContents)
         self.label_15.setGeometry(QtCore.QRect(0, 440, 151, 20))
         font = QtGui.QFont()
@@ -196,11 +196,11 @@ class Ui_Form(object):
         self.tabWidget.addTab(self.tab, _fromUtf8(""))
         self.tab_2 = QtGui.QWidget()
         self.tab_2.setObjectName(_fromUtf8("tab_2"))
-        self.riskTable = QtGui.QTableWidget(self.tab_2)
-        self.riskTable.setGeometry(QtCore.QRect(10, 20, 931, 361))
-        self.riskTable.setRowCount(11)
-        self.riskTable.setColumnCount(9)
-        self.riskTable.setObjectName(_fromUtf8("riskTable"))
+        self.tableWidget_2 = QtGui.QTableWidget(self.tab_2)
+        self.tableWidget_2.setGeometry(QtCore.QRect(10, 20, 1051, 361))
+        self.tableWidget_2.setRowCount(11)
+        self.tableWidget_2.setColumnCount(9)
+        self.tableWidget_2.setObjectName(_fromUtf8("tableWidget_2"))
         self.label_4 = QtGui.QLabel(self.tab_2)
         self.label_4.setGeometry(QtCore.QRect(140, 0, 191, 20))
         self.label_4.setStyleSheet(_fromUtf8("border: 1px solid black;\n"
@@ -247,57 +247,11 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        
-    def initializeTable(self):
-        #Setting Table Headers
-        headers = QtCore.QStringList()
-        headers.append("Ticker")
-        headers.append("Notional")
-        headers.append("Risk")
-        headers.append("LGD")
-        headers.append("Notional")
-        headers.append("Risk")
-        headers.append("LGD")
-        headers.append("Notional")
-        headers.append("Risk")
-        headers.append("LGD")
-        self.changeTable.setHorizontalHeaderLabels(headers)
-        riskHeaders = QtCore.QStringList()
-        riskHeaders.append("Book")
-        riskHeaders.append("Risk")
-        riskHeaders.append("Market Val")
-        riskHeaders.append("Risk")
-        riskHeaders.append("Market Val")
-        riskHeaders.append("Risk")
-        riskHeaders.append("Market Val")
-        riskHeaders.append("Risk")
-        riskHeaders.append("Market Val")
-        self.riskTable.setHorizontalHeaderLabels(riskHeaders)
-        #Setting Risk Initial Values
-        #2YR - 5YR - 10YR - 30YR
-        self.riskTable.setSpan(0, 1, 1, 2)
-        self.riskTable.setSpan(0, 3, 1, 2)
-        self.riskTable.setSpan(0, 5, 1, 2)
-        self.riskTable.setSpan(0, 7, 1, 2)
-        
-        twoYR = QtGui.QTableWidgetItem("2 YR")
-        twoYR.setBackgroundColor(QtGui.QColor(255,204,0))
-        twoYR.setTextAlignment(QtCore.Qt.AlignHCenter)
-        twoYR.setTextAlignment(QtCore.Qt.AlignVCenter)
-  
-        self.riskTable.setItem(0, 1, twoYR)
-        fiveYR = QtGui.QTableWidgetItem("5 YR")
-        self.riskTable.setItem(0, 3, fiveYR)
-        tenYR = QtGui.QTableWidgetItem("10 YR")
-        self.riskTable.setItem(0, 5, tenYR)
-        thirtyYR = QtGui.QTableWidgetItem("30 YR")
-        self.riskTable.setItem(0, 7, thirtyYR)
-
-        
-        #Setting Initial Cell Values
 
     def retranslateUi(self, Form):
+        self.tableWidget.setSortingEnabled(True)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("Form", "Daily Change", None, QtGui.QApplication.UnicodeUTF8))
+        self.tableWidget_2.setSortingEnabled(True)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("Form", "Risk", None, QtGui.QApplication.UnicodeUTF8))
 
 
@@ -307,7 +261,6 @@ if __name__ == "__main__":
     Form = QtGui.QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)
-    ui.initializeTable()
     Form.show()
     sys.exit(app.exec_())
 
