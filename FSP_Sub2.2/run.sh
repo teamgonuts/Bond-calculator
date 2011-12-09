@@ -6,7 +6,7 @@ echo "calling user is: \"`id -un`\" at: `date`"
 EXECUTABLE=./testdriver
 ERROR_LOGFILE=error_logfile
 # DATA_INPUT_FILE="./midterm.txt"
-HISTORIC_DATA_FILEPATH="/files/"
+HISTORIC_DATA_FILEPATH="/hist_files/"
 DATA_OPENING_INPUT_FILE="tradingbook_opening.txt"
 DATA_CLOSING_INPUT_FILE="tradingbook_closing.txt"
 
