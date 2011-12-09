@@ -47,103 +47,115 @@
       <attribute name="title">
        <string>Daily Change</string>
       </attribute>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QTableWidget" name="changeTable">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>1071</width>
-         <height>541</height>
+         <x>0</x>
+         <y>0</y>
+         <width>1061</width>
+         <height>441</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="sortingEnabled">
+        <bool>true</bool>
+       </property>
+       <property name="rowCount">
+        <number>14</number>
+       </property>
+       <property name="columnCount">
+        <number>10</number>
+       </property>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+      </widget>
+      <widget class="QWidget" name="layoutWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>450</y>
+         <width>1051</width>
+         <height>113</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QScrollArea" name="scrollArea">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>1065</width>
-               <height>416</height>
-              </rect>
-             </property>
-             <widget class="QTableWidget" name="changeTable">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>1051</width>
-                <height>411</height>
-               </rect>
-              </property>
-              <property name="sortingEnabled">
-               <bool>true</bool>
-              </property>
-              <property name="rowCount">
-               <number>14</number>
-              </property>
-              <property name="columnCount">
-               <number>10</number>
-              </property>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <row/>
-              <column/>
-              <column/>
-              <column/>
-              <column/>
-              <column/>
-              <column/>
-              <column/>
-              <column/>
-              <column/>
-              <column/>
-             </widget>
-             <widget class="QLabel" name="label_19">
-              <property name="geometry">
-               <rect>
-                <x>460</x>
-                <y>486</y>
-                <width>1069</width>
-                <height>17</height>
-               </rect>
-              </property>
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Total</string>
-              </property>
-             </widget>
-            </widget>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QLabel" name="varTotal">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>VaR - Total:</string>
+          </property>
+         </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <widget class="QLabel" name="varIR">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>VaR - Interest Rate:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="varCS">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>VaR - Credit Spread:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="clientTime">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Client Time:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="QLabel" name="varTotal">
+           <widget class="QLabel" name="serverTime">
             <property name="font">
              <font>
               <weight>75</weight>
@@ -151,12 +163,12 @@
              </font>
             </property>
             <property name="text">
-             <string>VaR - Total:</string>
+             <string>Server Time:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="varIR">
+           <widget class="QLabel" name="realTime">
             <property name="font">
              <font>
               <weight>75</weight>
@@ -164,12 +176,12 @@
              </font>
             </property>
             <property name="text">
-             <string>VaR - Interest Rate:</string>
+             <string>Real:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="varCS">
+           <widget class="QLabel" name="userTime">
             <property name="font">
              <font>
               <weight>75</weight>
@@ -177,12 +189,12 @@
              </font>
             </property>
             <property name="text">
-             <string>VaR - Credit Spread:</string>
+             <string>User:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="clientTime">
+           <widget class="QLabel" name="systemTime">
             <property name="font">
              <font>
               <weight>75</weight>
@@ -190,136 +202,20 @@
              </font>
             </property>
             <property name="text">
-             <string>Client Time:</string>
+             <string>System:</string>
             </property>
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QLabel" name="serverTime">
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Server Time:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="realTime">
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>Real:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="userTime">
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>User:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="systemTime">
-              <property name="font">
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="text">
-               <string>System:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="userSystemTime">
-              <property name="text">
-               <string>User + System:</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QLabel" name="userSystemTime">
+            <property name="text">
+             <string>User + System:</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
        </layout>
-      </widget>
-      <widget class="QLabel" name="label">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>0</y>
-         <width>291</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid black;
-background-color: #99FF80;</string>
-       </property>
-       <property name="text">
-        <string>Opening Position</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_2">
-       <property name="geometry">
-        <rect>
-         <x>440</x>
-         <y>0</y>
-         <width>291</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid black;
-background-color: #FFCC00;</string>
-       </property>
-       <property name="text">
-        <string>Closing Position</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_3">
-       <property name="geometry">
-        <rect>
-         <x>750</x>
-         <y>0</y>
-         <width>281</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid black;
-background-color: #BFFFFF;</string>
-       </property>
-       <property name="text">
-        <string>Intra-day Change</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
       </widget>
      </widget>
      <widget class="QWidget" name="tab_2">
@@ -329,17 +225,17 @@ background-color: #BFFFFF;</string>
       <widget class="QTableWidget" name="riskTable">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>931</width>
-         <height>301</height>
+         <x>50</x>
+         <y>0</y>
+         <width>979</width>
+         <height>359</height>
         </rect>
        </property>
        <property name="sortingEnabled">
         <bool>true</bool>
        </property>
        <property name="rowCount">
-        <number>9</number>
+        <number>11</number>
        </property>
        <property name="columnCount">
         <number>9</number>
@@ -353,6 +249,8 @@ background-color: #BFFFFF;</string>
        <row/>
        <row/>
        <row/>
+       <row/>
+       <row/>
        <column/>
        <column/>
        <column/>
@@ -362,109 +260,11 @@ background-color: #BFFFFF;</string>
        <column/>
        <column/>
        <column/>
-      </widget>
-      <widget class="QLabel" name="label_4">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>0</y>
-         <width>191</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid black;
-background-color: #99FF80;</string>
-       </property>
-       <property name="text">
-        <string>2 YR</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_5">
-       <property name="geometry">
-        <rect>
-         <x>340</x>
-         <y>0</y>
-         <width>191</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid black;
-background-color: #FFCC00;</string>
-       </property>
-       <property name="text">
-        <string>5 YR</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_6">
-       <property name="geometry">
-        <rect>
-         <x>540</x>
-         <y>0</y>
-         <width>191</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid black;
-background-color: #BFFFFF;</string>
-       </property>
-       <property name="text">
-        <string>10 YR</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_7">
-       <property name="geometry">
-        <rect>
-         <x>740</x>
-         <y>0</y>
-         <width>191</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid black;
-background-color: #FF8080;</string>
-       </property>
-       <property name="text">
-        <string>30 YR</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
       </widget>
       <widget class="QWidget" name="layoutWidget_3">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>540</y>
          <width>1041</width>
          <height>20</height>
@@ -535,7 +335,7 @@ background-color: #FF8080;</string>
       <widget class="QLabel" name="clientTime_2">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>520</y>
          <width>1067</width>
          <height>17</height>
@@ -549,6 +349,45 @@ background-color: #FF8080;</string>
        </property>
        <property name="text">
         <string>Client Time:</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="shiftUp">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>360</y>
+         <width>325</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Shift Up 50%</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="shiftDown">
+       <property name="geometry">
+        <rect>
+         <x>380</x>
+         <y>360</y>
+         <width>325</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Shift Down 50%</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="reset">
+       <property name="geometry">
+        <rect>
+         <x>710</x>
+         <y>360</y>
+         <width>325</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Reset</string>
        </property>
       </widget>
      </widget>
