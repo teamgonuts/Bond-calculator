@@ -401,15 +401,8 @@ class Ui_Form(object):
         s.send(var)
         dataArr = []
         data = repr(s.recv(MSGSIZE))
-        while(len(data) > 0)
-            dataArr.append(repr(data))
-            data = s.recv(MSGSIZE)
-        
-        i = 1
-        for d in dataArr:
-            self.changeTable.setItem(i,1, QtGui.QTableWidgetItem(d))
-            i++
-            
+        self.changeTable.setItem(1,1, QtGui.QTableWidgetItem(data))
+
         s.close()
 
 if __name__ == "__main__":
