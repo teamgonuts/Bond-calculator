@@ -6,7 +6,7 @@ import sys
 
 
 #==============SPAWN SERVER=====================#
-
+"""
 def run(program, *args):
     pid = os.fork()
     if not pid:
@@ -17,7 +17,7 @@ def run(program, *args):
 
 run("sh", "run.sh")
 
-
+"""
 #==============CODE===========================#
 
 

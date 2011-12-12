@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'client.ui'
 #
-# Created: Fri Dec  9 12:41:46 2011
+# Created: Mon Dec 12 15:27:09 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -127,9 +127,9 @@ class Ui_Form(object):
         self.tab_2 = QtGui.QWidget()
         self.tab_2.setObjectName(_fromUtf8("tab_2"))
         self.riskTable = QtGui.QTableWidget(self.tab_2)
-        self.riskTable.setGeometry(QtCore.QRect(0, 0, 1061,375))
+        self.riskTable.setGeometry(QtCore.QRect(0, 0, 1061, 375))
         self.riskTable.setRowCount(11)
-        self.riskTable.setColumnCount(10)
+        self.riskTable.setColumnCount(9)
         self.riskTable.setObjectName(_fromUtf8("riskTable"))
         self.layoutWidget_3 = QtGui.QWidget(self.tab_2)
         self.layoutWidget_3.setGeometry(QtCore.QRect(0, 540, 1041, 20))
@@ -197,7 +197,7 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.tabWidget)
 
         self.retranslateUi(Form)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Form)
         
     def initializeTable(self):
@@ -297,18 +297,43 @@ class Ui_Form(object):
         bc = QtGui.QTableWidgetItem("Bump Curve")
         bc.setTextAlignment(QtCore.Qt.AlignVCenter)
         self.riskTable.setItem(10, 0, bc)
-        #Changing Background Color of Changeable Slots
-        bc1 = QtGui.QTableWidgetItem("")
-        bc1.setBackgroundColor(QtGui.QColor(238,233,233))
+        #Changing Background Color of Non-Changeable Slots
+        bc0 = QtGui.QTableWidgetItem("")
+        bc0.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(10,1,bc0)
+        yc0 = QtGui.QTableWidgetItem("")
+        yc0.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(9,1,yc0)
+        gry0 = QtGui.QTableWidgetItem("")
+        gry0.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(10,3,gry0)
+        gry1 = QtGui.QTableWidgetItem("")
+        gry1.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(9,3,gry1)
+        gry2 = QtGui.QTableWidgetItem("")
+        gry2.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(10,5,gry2)
+        gry3 = QtGui.QTableWidgetItem("")
+        gry3.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(9,5,gry3)
+        gry4 = QtGui.QTableWidgetItem("")
+        gry4.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(10,7,gry4)
+        gry5 = QtGui.QTableWidgetItem("")
+        gry5.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(9,7,gry5)
+        #Setting Changable Slots to 0
+        bc1 = QtGui.QTableWidgetItem("0")
+        bc1.setTextAlignment(QtCore.Qt.AlignCenter)
         self.riskTable.setItem(10,2,bc1)
-        bc2 = QtGui.QTableWidgetItem("")
-        bc2.setBackgroundColor(QtGui.QColor(238,233,233))
+        bc2 = QtGui.QTableWidgetItem("0")
+        bc2.setTextAlignment(QtCore.Qt.AlignCenter)
         self.riskTable.setItem(10,4,bc2)
-        bc3 = QtGui.QTableWidgetItem("")
-        bc3.setBackgroundColor(QtGui.QColor(238,233,233))
+        bc3 = QtGui.QTableWidgetItem("0")
+        bc3.setTextAlignment(QtCore.Qt.AlignCenter)
         self.riskTable.setItem(10,6,bc3)
-        bc4 = QtGui.QTableWidgetItem("")
-        bc4.setBackgroundColor(QtGui.QColor(238,233,233))
+        bc4 = QtGui.QTableWidgetItem("0")
+        bc4.setTextAlignment(QtCore.Qt.AlignCenter)
         self.riskTable.setItem(10,8,bc4)
         
         #Horizontal Header
@@ -359,11 +384,11 @@ class Ui_Form(object):
         mv30 = QtGui.QTableWidgetItem("Market Val")
         mv30.setTextAlignment(QtCore.Qt.AlignCenter)
         self.riskTable.setItem(1,8,mv30)
-        
-    
 
     def retranslateUi(self, Form):
+        self.changeTable.setSortingEnabled(True)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("Form", "Daily Change", None, QtGui.QApplication.UnicodeUTF8))
+        self.riskTable.setSortingEnabled(True)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("Form", "Risk", None, QtGui.QApplication.UnicodeUTF8))
 
 

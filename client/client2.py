@@ -2,11 +2,11 @@
 
 # Form implementation generated from reading ui file 'client.ui'
 #
-# Created: Fri Dec  9 15:43:45 2011
+# Created: Mon Dec 12 15:27:09 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
-
+import socket
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -43,7 +43,7 @@ class Ui_Form(object):
         self.tab.setObjectName(_fromUtf8("tab"))
         self.changeTable = QtGui.QTableWidget(self.tab)
         self.changeTable.setGeometry(QtCore.QRect(0, 0, 1061, 441))
-        self.changeTable.setRowCount(14)
+        self.changeTable.setRowCount(16)
         self.changeTable.setColumnCount(10)
         self.changeTable.setObjectName(_fromUtf8("changeTable"))
         self.layoutWidget_2 = QtGui.QWidget(self.tab)
@@ -127,7 +127,7 @@ class Ui_Form(object):
         self.tab_2 = QtGui.QWidget()
         self.tab_2.setObjectName(_fromUtf8("tab_2"))
         self.riskTable = QtGui.QTableWidget(self.tab_2)
-        self.riskTable.setGeometry(QtCore.QRect(50, 0, 979, 359))
+        self.riskTable.setGeometry(QtCore.QRect(0, 0, 1061, 375))
         self.riskTable.setRowCount(11)
         self.riskTable.setColumnCount(9)
         self.riskTable.setObjectName(_fromUtf8("riskTable"))
@@ -182,15 +182,15 @@ class Ui_Form(object):
         self.clientTime_2.setText(QtGui.QApplication.translate("Form", "Client Time:", None, QtGui.QApplication.UnicodeUTF8))
         self.clientTime_2.setObjectName(_fromUtf8("clientTime_2"))
         self.shiftUp = QtGui.QPushButton(self.tab_2)
-        self.shiftUp.setGeometry(QtCore.QRect(50, 360, 325, 27))
+        self.shiftUp.setGeometry(QtCore.QRect(50, 390, 325, 27))
         self.shiftUp.setText(QtGui.QApplication.translate("Form", "Shift Up 50%", None, QtGui.QApplication.UnicodeUTF8))
         self.shiftUp.setObjectName(_fromUtf8("shiftUp"))
         self.shiftDown = QtGui.QPushButton(self.tab_2)
-        self.shiftDown.setGeometry(QtCore.QRect(380, 360, 325, 27))
+        self.shiftDown.setGeometry(QtCore.QRect(380, 390, 325, 27))
         self.shiftDown.setText(QtGui.QApplication.translate("Form", "Shift Down 50%", None, QtGui.QApplication.UnicodeUTF8))
         self.shiftDown.setObjectName(_fromUtf8("shiftDown"))
         self.reset = QtGui.QPushButton(self.tab_2)
-        self.reset.setGeometry(QtCore.QRect(710, 360, 325, 27))
+        self.reset.setGeometry(QtCore.QRect(710, 390, 325, 27))
         self.reset.setText(QtGui.QApplication.translate("Form", "Reset", None, QtGui.QApplication.UnicodeUTF8))
         self.reset.setObjectName(_fromUtf8("reset"))
         self.tabWidget.addTab(self.tab_2, _fromUtf8(""))
@@ -199,13 +199,211 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        
+    def initializeTable(self):
+        #Setting Change Table
+        #Header Row
+        #Opening Pos- Closing Pos - Intra-day Change
+        self.changeTable.setSpan(0, 1, 1, 3)
+        self.changeTable.setSpan(0, 4, 1, 3)
+        self.changeTable.setSpan(0, 7, 1, 3)
+        op = QtGui.QTableWidgetItem("Opening Position")
+        op.setBackgroundColor(QtGui.QColor(153,255,128))
+        op.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.changeTable.setItem(0,1,op)
+        cp = QtGui.QTableWidgetItem("Closing Position")
+        cp.setBackgroundColor(QtGui.QColor(255,204,0))
+        cp.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.changeTable.setItem(0,4,cp)
+        idc = QtGui.QTableWidgetItem("Intra-day Change")
+        idc.setBackgroundColor(QtGui.QColor(191,255,255))
+        idc.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.changeTable.setItem(0,7,idc)
+        #Ticker - notional - risk - lgd - x3
+        ticker = QtGui.QTableWidgetItem("Ticker")
+        self.changeTable.setItem(1,0,ticker)
+        n1 = QtGui.QTableWidgetItem("Notional")
+        self.changeTable.setItem(1,1,n1)
+        r1 = QtGui.QTableWidgetItem("Risk")
+        self.changeTable.setItem(1,2,r1)
+        l1 = QtGui.QTableWidgetItem("LGD")
+        self.changeTable.setItem(1,3,l1)
+        n2 = QtGui.QTableWidgetItem("Notional")
+        self.changeTable.setItem(1,4,n2)
+        r2 = QtGui.QTableWidgetItem("Risk")
+        self.changeTable.setItem(1,5,r2)
+        l2 = QtGui.QTableWidgetItem("LGD")
+        self.changeTable.setItem(1,6,l2)
+        n3 = QtGui.QTableWidgetItem("Notional")
+        self.changeTable.setItem(1,7,n3)
+        r3 = QtGui.QTableWidgetItem("Risk")
+        self.changeTable.setItem(1,8,r3)
+        l3 = QtGui.QTableWidgetItem("LGD")
+        self.changeTable.setItem(1,9,l3)
+        #Header Col
+        temp = QtGui.QTableWidgetItem("EX.")
+        self.changeTable.setItem(2,0,temp)
+        
+        A = QtGui.QTableWidgetItem("A")
+        self.changeTable.setItem(4,0,A)
+        AA = QtGui.QTableWidgetItem("AA")
+        self.changeTable.setItem(5,0,AA)
+        AAA = QtGui.QTableWidgetItem("AAA")
+        self.changeTable.setItem(6,0,AAA)
+        B = QtGui.QTableWidgetItem("B")
+        self.changeTable.setItem(7,0,B)
+        BB = QtGui.QTableWidgetItem("BB")
+        self.changeTable.setItem(8,0,BB)
+        BBB = QtGui.QTableWidgetItem("BBB")
+        self.changeTable.setItem(9,0,BBB)
+        C = QtGui.QTableWidgetItem("C")
+        self.changeTable.setItem(10,0,C)
+        CC = QtGui.QTableWidgetItem("CC")
+        self.changeTable.setItem(11,0,CC)
+        CCC = QtGui.QTableWidgetItem("CCC")
+        self.changeTable.setItem(12,0,CCC)
+        
+        ig = QtGui.QTableWidgetItem("Investment Grade")
+        self.changeTable.setItem(14,0,ig)
+        junk = QtGui.QTableWidgetItem("Junk")
+        self.changeTable.setItem(15,0,junk)
+
+        #Setting Risk Table
+        self.riskTable.setColumnWidth(0, 150)
+        #2YR - 5YR - 10YR - 30YR
+        self.riskTable.setSpan(0, 1, 1, 2)
+        self.riskTable.setSpan(0, 3, 1, 2)
+        self.riskTable.setSpan(0, 5, 1, 2)
+        self.riskTable.setSpan(0, 7, 1, 2)
+        
+        #Vertical Header
+        closingPos = QtGui.QTableWidgetItem("Closing Position")
+        closingPos.setTextAlignment(QtCore.Qt.AlignVCenter)
+        self.riskTable.setItem(3, 0, closingPos)
+        twoYRHedge = QtGui.QTableWidgetItem("2 YR Hedge")
+        twoYRHedge.setTextAlignment(QtCore.Qt.AlignVCenter)
+        self.riskTable.setItem(4, 0, twoYRHedge)
+        
+        shiftedPos = QtGui.QTableWidgetItem("Shifted Position")
+        shiftedPos.setTextAlignment(QtCore.Qt.AlignVCenter)
+        self.riskTable.setItem(6, 0, shiftedPos)
+        shiftedTwoYRHedge = QtGui.QTableWidgetItem("Shifted 2 YR Hedge")
+        shiftedTwoYRHedge.setTextAlignment(QtCore.Qt.AlignVCenter)
+        self.riskTable.setItem(7, 0, shiftedTwoYRHedge)
+        
+        yc = QtGui.QTableWidgetItem("Yield Curve")
+        yc.setTextAlignment(QtCore.Qt.AlignVCenter)
+        self.riskTable.setItem(9, 0, yc)
+        bc = QtGui.QTableWidgetItem("Bump Curve")
+        bc.setTextAlignment(QtCore.Qt.AlignVCenter)
+        self.riskTable.setItem(10, 0, bc)
+        #Changing Background Color of Non-Changeable Slots
+        bc0 = QtGui.QTableWidgetItem("")
+        bc0.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(10,1,bc0)
+        yc0 = QtGui.QTableWidgetItem("")
+        yc0.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(9,1,yc0)
+        gry0 = QtGui.QTableWidgetItem("")
+        gry0.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(10,3,gry0)
+        gry1 = QtGui.QTableWidgetItem("")
+        gry1.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(9,3,gry1)
+        gry2 = QtGui.QTableWidgetItem("")
+        gry2.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(10,5,gry2)
+        gry3 = QtGui.QTableWidgetItem("")
+        gry3.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(9,5,gry3)
+        gry4 = QtGui.QTableWidgetItem("")
+        gry4.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(10,7,gry4)
+        gry5 = QtGui.QTableWidgetItem("")
+        gry5.setBackgroundColor(QtGui.QColor(238,233,233))
+        self.riskTable.setItem(9,7,gry5)
+        #Setting Changable Slots to 0
+        bc1 = QtGui.QTableWidgetItem("0")
+        bc1.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(10,2,bc1)
+        bc2 = QtGui.QTableWidgetItem("0")
+        bc2.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(10,4,bc2)
+        bc3 = QtGui.QTableWidgetItem("0")
+        bc3.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(10,6,bc3)
+        bc4 = QtGui.QTableWidgetItem("0")
+        bc4.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(10,8,bc4)
+        
+        #Horizontal Header
+        twoYR = QtGui.QTableWidgetItem("2 YR")
+        twoYR.setBackgroundColor(QtGui.QColor(255,204,0))
+        twoYR.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(0, 1, twoYR)
+        
+        fiveYR = QtGui.QTableWidgetItem("5 YR")
+        fiveYR.setBackgroundColor(QtGui.QColor(191,255,255))
+        fiveYR.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(0, 3, fiveYR)
+        
+        tenYR = QtGui.QTableWidgetItem("10 YR")
+        tenYR.setBackgroundColor(QtGui.QColor(255,128,128))
+        tenYR.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(0, 5, tenYR)
+        
+        thirtyYR = QtGui.QTableWidgetItem("30 YR")
+        thirtyYR.setBackgroundColor(QtGui.QColor(153,255,128))
+        thirtyYR.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(0, 7, thirtyYR)
+        
+        book = QtGui.QTableWidgetItem("Book")
+        book.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(1,0,book)
+        risk2 = QtGui.QTableWidgetItem("Risk")
+        risk2.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(1,1,risk2)
+        mv2 = QtGui.QTableWidgetItem("Market Val")
+        mv2.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(1,2,mv2)
+        risk5 = QtGui.QTableWidgetItem("Risk")
+        risk5.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(1,3,risk5)
+        mv5 = QtGui.QTableWidgetItem("Market Val")
+        mv5.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(1,4,mv5)
+        risk10 = QtGui.QTableWidgetItem("Risk")
+        risk10.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(1,5,risk10)
+        mv10 = QtGui.QTableWidgetItem("Market Val")
+        mv10.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(1,6,mv10)
+        risk30 = QtGui.QTableWidgetItem("Risk")
+        risk30.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(1,7,risk30)
+        mv30 = QtGui.QTableWidgetItem("Market Val")
+        mv30.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.riskTable.setItem(1,8,mv30)
 
     def retranslateUi(self, Form):
         self.changeTable.setSortingEnabled(True)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("Form", "Daily Change", None, QtGui.QApplication.UnicodeUTF8))
         self.riskTable.setSortingEnabled(True)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("Form", "Risk", None, QtGui.QApplication.UnicodeUTF8))
-
+    
+    def loadPortfolio(self):
+        HOST = socket.gethostname()
+        PORT = 0x1234
+        MSGSIZE = 8192
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((HOST, PORT))
+        var = "loadticker";
+        s.send(var)
+        data = s.recv(MSGSIZE)
+        stringshit = repr(data)
+        test = QtGui.QTableWidgetItem(stringshit)
+        self.changeTable.setItem(1,1, test)
+        s.close()
 
 if __name__ == "__main__":
     import sys
@@ -213,6 +411,8 @@ if __name__ == "__main__":
     Form = QtGui.QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)
+    ui.initializeTable()
+    ui.loadPortfolio()
     Form.show()
     sys.exit(app.exec_())
 

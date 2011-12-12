@@ -483,9 +483,9 @@ main(int argc, const char* arg[])
         /* 
          * ack back to the client 
          */
-        sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", _total_var/1000, _cr_var/1000,_ir_var/1000, realtime, usertime, systemtime);
+        //sprintf (msg, "%.3f %.3f %.3f %.3f %.3f %.3f", _total_var/1000, _cr_var/1000,_ir_var/1000, realtime, usertime, systemtime);
         
-        //strcpy(msg," this is the server message response!");
+        strcpy(msg," this is the server message response!");
         if (send(sd_current, msg, strlen(msg), 0) == -1) {
             fprintf(stderr,"SBB send(...) failed errno: %d exiting...\n", errno);
             exit(1);
