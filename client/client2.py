@@ -399,10 +399,17 @@ class Ui_Form(object):
         s.connect((HOST, PORT))
         var = "loadticker";
         s.send(var)
-        data = s.recv(MSGSIZE)
-        stringshit = repr(data)
-        test = QtGui.QTableWidgetItem(stringshit)
-        self.changeTable.setItem(1,1, test)
+        dataArr = []
+        data = repr(s.recv(MSGSIZE))
+        while(len(data) > 0)
+            dataArr.append(repr(data))
+            data = s.recv(MSGSIZE)
+        
+        i = 1
+        for d in dataArr:
+            self.changeTable.setItem(i,1, QtGui.QTableWidgetItem(d))
+            i++
+            
         s.close()
 
 if __name__ == "__main__":
