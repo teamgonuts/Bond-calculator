@@ -767,6 +767,48 @@ class Ui_Form(object):
         self.riskTable.setItem(1,8,mv30)
         QtCore.QObject.connect(self.riskTable, QtCore.SIGNAL(_fromUtf8("cellChanged(int, int)")), self.bumpCurve)
 
+    def createGraph(self):
+        # Send in data as param, OR
+        #data = [17, 20, 15, 10, 7, 5, 4, 3, 2, 1, 1, 0]        
+        
+        # Recieve data within function 
+        inputString = "-20 15 10 7 5 -4 3 2 1 1 0"
+        
+        import tkinter as tk  # gives tk namespace
+        
+        data = [int(x) for x in inputString.split()]
+         
+        root = tk.Tk()
+        root.title("FSPwners")
+        screen_width = 400
+        screen_height = 700
+        screen = tk.Canvas(root, width=screen_width, height=screen_height, bg= 'white')
+        screen.pack()
+         
+        # highest y = max_data_value * y_stretch
+        y_stretch = 15
+        # gap between lower canvas edge and x axis
+        y_gap = 350
+        # stretch enough to get all data items in
+        x_stretch = 10
+        x_width = 20
+        # gap between left canvas edge and y axis
+        x_gap = 20
+         
+         
+        for x, y in enumerate(data):
+            # calculate reactangle coordinates (integers) for each bar
+            x0 = x * x_stretch + x * x_width + x_gap
+            y0 = screen_height - (y * y_stretch + y_gap)
+            x1 = x * x_stretch + x * x_width + x_width + x_gap
+            y1 = screen_height - y_gap
+            # draw the bar
+            print(x0, y0, x1, y1)
+            screen.create_rectangle(x0, y0, x1, y1, fill="red")
+            # put the y value above each bar
+            screen.create_text(x0+2, y0, anchor=tk.SW, text=str(y))
+         
+        root.mainloop()
 
 
 if __name__ == "__main__":
