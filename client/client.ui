@@ -41,7 +41,7 @@
       <enum>Qt::TabFocus</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -91,6 +91,19 @@
        <column/>
        <column/>
        <column/>
+      </widget>
+      <widget class="QPushButton" name="go">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>210</y>
+         <width>191</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Load Portfolio</string>
+       </property>
       </widget>
       <widget class="QLabel" name="clientTime">
        <property name="geometry">
@@ -208,7 +221,7 @@
         <item>
          <widget class="QLabel" name="vt1">
           <property name="text">
-           <string>opening</string>
+           <string/>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -218,7 +231,7 @@
         <item>
          <widget class="QLabel" name="vt2">
           <property name="text">
-           <string>opening</string>
+           <string/>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -228,7 +241,7 @@
         <item>
          <widget class="QLabel" name="vt3">
           <property name="text">
-           <string>opening</string>
+           <string/>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -263,7 +276,7 @@
         <item>
          <widget class="QLabel" name="vc1">
           <property name="text">
-           <string>opening</string>
+           <string/>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -273,7 +286,7 @@
         <item>
          <widget class="QLabel" name="vc2">
           <property name="text">
-           <string>opening</string>
+           <string/>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -283,7 +296,7 @@
         <item>
          <widget class="QLabel" name="vc3">
           <property name="text">
-           <string>opening</string>
+           <string/>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -318,7 +331,7 @@
         <item>
          <widget class="QLabel" name="vi1">
           <property name="text">
-           <string>opening</string>
+           <string/>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -328,7 +341,7 @@
         <item>
          <widget class="QLabel" name="vi2">
           <property name="text">
-           <string>opening</string>
+           <string/>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -338,7 +351,7 @@
         <item>
          <widget class="QLabel" name="vi3">
           <property name="text">
-           <string>opening</string>
+           <string/>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
