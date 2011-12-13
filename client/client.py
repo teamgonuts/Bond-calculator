@@ -807,7 +807,11 @@ class Ui_Form(object):
             y1 = screen_height - y_gap
             # draw the bar
             print(x0, y0, x1, y1)
-            screen.create_rectangle(x0, y0, x1, y1, fill="red")
+            if y < 0:
+                screen.create_rectangle(x0, y0, x1, y1, fill="red")
+            else:
+                screen.create_rectangle(x0, y0, x1, y1, fill="green")
+            
             # put the y value above each bar
             screen.create_text(x0+2, y0, anchor=tk.SW, text=str(y))
          
