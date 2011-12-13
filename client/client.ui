@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1090</width>
-    <height>621</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -92,16 +92,106 @@
        <column/>
        <column/>
       </widget>
-      <widget class="QWidget" name="layoutWidget_2">
+      <widget class="QLabel" name="clientTime">
        <property name="geometry">
         <rect>
-         <x>0</x>
-         <y>450</y>
-         <width>1051</width>
-         <height>113</height>
+         <x>1</x>
+         <y>535</y>
+         <width>88</width>
+         <height>17</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Client Time:</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>2</x>
+         <y>564</y>
+         <width>1041</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="serverTime">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Server Time:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="realTime">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Real:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="userTime">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>User:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="systemTime">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>System:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="userSystemTime">
+          <property name="text">
+           <string>User + System:</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>1</x>
+         <y>450</y>
+         <width>1041</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QLabel" name="varTotal">
           <property name="font">
@@ -116,18 +206,47 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="varIR">
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
+         <widget class="QLabel" name="vt1">
           <property name="text">
-           <string>VaR - Interest Rate:</string>
+           <string>opening</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="vt2">
+          <property name="text">
+           <string>opening</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="vt3">
+          <property name="text">
+           <string>opening</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>1</x>
+         <y>507</y>
+         <width>1041</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QLabel" name="varCS">
           <property name="font">
@@ -142,7 +261,49 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="clientTime">
+         <widget class="QLabel" name="vc1">
+          <property name="text">
+           <string>opening</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="vc2">
+          <property name="text">
+           <string>opening</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="vc3">
+          <property name="text">
+           <string>opening</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>1</x>
+         <y>479</y>
+         <width>1041</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="varIR">
           <property name="font">
            <font>
             <weight>75</weight>
@@ -150,72 +311,39 @@
            </font>
           </property>
           <property name="text">
-           <string>Client Time:</string>
+           <string>VaR - Interest Rate:</string>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QLabel" name="serverTime">
-            <property name="font">
-             <font>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Server Time:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="realTime">
-            <property name="font">
-             <font>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Real:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="userTime">
-            <property name="font">
-             <font>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>User:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="systemTime">
-            <property name="font">
-             <font>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>System:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="userSystemTime">
-            <property name="text">
-             <string>User + System:</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QLabel" name="vi1">
+          <property name="text">
+           <string>opening</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="vi2">
+          <property name="text">
+           <string>opening</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="vi3">
+          <property name="text">
+           <string>opening</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -267,7 +395,7 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>540</y>
+         <y>570</y>
          <width>1041</width>
          <height>20</height>
         </rect>
@@ -338,7 +466,7 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>520</y>
+         <y>550</y>
          <width>1067</width>
          <height>17</height>
         </rect>
@@ -398,5 +526,22 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>shiftUp</sender>
+   <signal>clicked()</signal>
+   <receiver>vc1</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>223</x>
+     <y>443</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>401</x>
+     <y>556</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
