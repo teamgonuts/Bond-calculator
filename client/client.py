@@ -768,14 +768,17 @@ class Ui_Form(object):
         QtCore.QObject.connect(self.riskTable, QtCore.SIGNAL(_fromUtf8("cellChanged(int, int)")), self.bumpCurve)
 
     def createGraph(self):
+        import tkinter as tk
+        
         # Send in data as param, OR
         #data = [17, 20, 15, 10, 7, 5, 4, 3, 2, 1, 1, 0]        
         
         # Recieve data within function 
-        inputString = "-20 15 10 7 5 -4 3 2 1 1 0"
+        s.send("loadgraph")
         
-        import tkinter as tk  # gives tk namespace
-        
+        inputString = repr(s.recv(MSGSIZE))
+        #inputString = "-20 15 10 7 5 -4 3 2 1 1 0"
+        print(inputString)
         data = [int(x) for x in inputString.split()]
          
         root = tk.Tk()
