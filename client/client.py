@@ -3,12 +3,18 @@
 # Form implementation generated from reading ui file 'client.ui'
 #
 # Created: Mon Dec 12 20:22:39 2011
-#      by: PyQt4 UI code generator 4.8.6
+# by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
 
 import socket
 from PyQt4 import QtCore, QtGui
+
+HOST = socket.gethostname()
+PORT = 0x1234
+MSGSIZE = 8192
+
+s = None
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -260,7 +266,7 @@ class Ui_Form(object):
         self.reset.setObjectName(_fromUtf8("reset"))
         self.tabWidget.addTab(self.tab_2, _fromUtf8(""))
         self.verticalLayout.addWidget(self.tabWidget)
-
+        
         self.retranslateUi(Form)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.shiftUp, QtCore.SIGNAL(_fromUtf8("clicked()")), self.shiftUpMeth)
@@ -269,13 +275,13 @@ class Ui_Form(object):
         QtCore.QObject.connect(self.go, QtCore.SIGNAL(_fromUtf8("clicked()")), self.goMeth)
         #self.riskTable.cellChanged(self.realTime_2.hide)
         QtCore.QMetaObject.connectSlotsByName(Form)
-
+    
     #initializes table and loads porfolio
     def goMeth(self):
-            self.go.hide()
-            self.initializeTable()
-            self.loadPortfolio()
-            
+        self.go.hide()
+        self.initializeTable()
+        self.loadPortfolio()
+    
     def retranslateUi(self, Form):
         self.changeTable.setSortingEnabled(True)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("Form", "Daily Change", None, QtGui.QApplication.UnicodeUTF8))
@@ -283,33 +289,40 @@ class Ui_Form(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("Form", "Risk", None, QtGui.QApplication.UnicodeUTF8))
     
     def loadPortfolio(self):
-        """
-        HOST = socket.gethostname()
-        PORT = 0x1234
-        MSGSIZE = 8192
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((HOST, PORT))
-        var = "loadticker";
-        s.send(var)
+        s.send("loadticker")
         data = repr(s.recv(MSGSIZE))
-        #s.close()
-        """
-        data = "ASS 1 2 3 4 5 6 TITS 7 8 9 10 11 12 POO 88 34 11 234 54 2.9"
-        row = self.loadticker(data)
-        data = "1 33 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 6 6 6 6 6 6 7 7 7 7 7 7 8 8 8 8 4 8 9 9 9 9 9 9"
-        self.loadquality(data, row)
+        data = data.strip('\'')
+        tickerdata = data.split("blah");
+        row = self.loadticker(tickerdata[0])
+        self.loadquality(tickerdata[1].strip(' '), row)
         self.calcInvestmentJunkBonds(row)
-        data = "1 2 3 4 5 6"
-        self.loadvars(data)
-        data = "2.3 4.7 69.69"
-        self.loadtime(data)
-        data = "1 2 3 4 5 6 7 8"
-        self.loadBucketClose(data)
-        data = "1 2 3 4"
-        self.load2YrHedge(data)
-        data = "1 2 3 4"
-        self.loadYieldCurve(data)
         
+        
+        s.send("loadvars")
+        vardata = repr(s.recv(MSGSIZE))
+        vardata = vardata.strip('\'')
+        self.loadvars(vardata)
+        
+        s.send("loadyieldcurve")
+        yielddata = repr(s.recv(MSGSIZE))
+        yielddata = yielddata.strip('\'')
+        self.loadYieldCurve(yielddata)
+    
+        s.send("loadBucketClose")
+        bucketData = repr(s.recv(MSGSIZE))
+        bucketData = bucketData.strip('\'')
+        hedgeData = bucketData.split("blah");
+        
+        self.loadBucketClose(hedgeData[0])
+        self.load2YrHedge(hedgeData[1].strip(' '))
+
+            
+        '''
+        
+           
+        data = ""
+        self.loadtime(data)'''
+    
     def bumpCurve(self, row, col):
         if row == 10: #if change is in bumpCurve row
             #finding bucket
@@ -325,10 +338,15 @@ class Ui_Form(object):
             
             amount = self.riskTable.item(row, col).text()
             
-            msg = "bump_" + bucket + "_" + amount
-            #made up data
-            data = "15 14 13 12 11 10 9 8 7 6 5 4 3 2 1"
-            dataArr = data.split(' ')
+            msg = "bump_" + bucket + "_" + str(amount)
+            print msg
+            s.send(msg)
+        
+            bump_delta = repr(s.recv(MSGSIZE))
+            bump_delta = bump_delta.strip('\'')
+    
+            dataArr = bump_delta.split(' ')
+
             row = 6
             col = 1
             i = 0
@@ -345,7 +363,7 @@ class Ui_Form(object):
                 i += 1
             
             #update time
-            time = dataArr[12] + " " +  dataArr[13] + " " + dataArr[14]
+            time = dataArr[12] + " " + dataArr[13] + " " + dataArr[14]
             self.loadtime(time)
     
     #resets all the data entered cells
@@ -355,13 +373,13 @@ class Ui_Form(object):
         col = 1
         for i in range(0, 15):
             if i < 8: #its the bucket info
-                self.riskTable.setItem(row, col, QtGui.QTableWidgetItem(""))
+                self.riskTable.setItem(row, col, QtGui.QTableWidgetItem(''))
                 col += 1
                 if i == 7: #time to move to the next row
                     row += 1
                     col = 2
             elif i < 12: #its the 2 yr hedge
-                self.riskTable.setItem(row, col, QtGui.QTableWidgetItem(""))
+                self.riskTable.setItem(row, col, QtGui.QTableWidgetItem(''))
                 col += 2
             i += 1
         
@@ -378,12 +396,16 @@ class Ui_Form(object):
         temp4 = QtGui.QTableWidgetItem("0")
         temp4.setTextAlignment(QtCore.Qt.AlignCenter)
         self.riskTable.setItem(10, 8, temp4)
-
+    
     #is called when the button is pressed
     #8. "shiftdown" - returns 15 numbers, need to parse and put in both rows, last 3 numbers are the time
     def shiftDownMeth(self):
-        data = "15 14 13 12 11 10 9 8 7 6 5 4 3 2 1"
-        dataArr = data.split(' ')
+            
+        s.send("shiftdown")
+        yielddown = repr(s.recv(MSGSIZE))
+        yielddown = yielddown.strip('\'')
+            
+        dataArr = yielddown.split(' ')
         row = 6
         col = 1
         i = 0
@@ -398,16 +420,19 @@ class Ui_Form(object):
                 self.riskTable.setItem(row, col, QtGui.QTableWidgetItem(item))
                 col += 2
             i += 1
-            
+        
         #update time
-        time = dataArr[12] + " " +  dataArr[13] + " " + dataArr[14]
-        self.loadtime(time)    
-
+        time = dataArr[12] + " " + dataArr[13] + " " + dataArr[14]
+        self.loadtime(time)
+    
     #is called when the button is pressed
     #8. "shiftup" - returns 15 numbers, need to parse and put in both rows, last 3 numbers are the time
     def shiftUpMeth(self):
-        data = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"
-        dataArr = data.split(' ')
+        s.send("shiftup")
+        yieldup = repr(s.recv(MSGSIZE))
+        yieldup = yieldup.strip('\'')
+            
+        dataArr = yieldup.split(' ')
         row = 6
         col = 1
         i = 0
@@ -422,10 +447,10 @@ class Ui_Form(object):
                 self.riskTable.setItem(row, col, QtGui.QTableWidgetItem(item))
                 col += 2
             i += 1
-            
+        
         #update time
-        time = dataArr[12] + " " +  dataArr[13] + " " + dataArr[14]
-        self.loadtime(time)      
+        time = dataArr[12] + " " + dataArr[13] + " " + dataArr[14]
+        self.loadtime(time)
     
     #7. "loadyieldcurve" - returns 4 numbers
     def loadYieldCurve(self, data):
@@ -445,18 +470,18 @@ class Ui_Form(object):
         col = 2
         for item in dataArr:
             self.riskTable.setItem(row, col, QtGui.QTableWidgetItem(item))
-            col += 2        
+            col += 2
     
-    #"loadbucketclosingposition" - returns 8 numbers to go in row "closing position"    
+    #"loadbucketclosingposition" - returns 8 numbers to go in row "closing position"
     def loadBucketClose(self, data):
         dataArr = data.split(' ')
         row = 3
         col = 1
         for item in dataArr:
             self.riskTable.setItem(row, col, QtGui.QTableWidgetItem(item))
-            col += 1 
+            col += 1
     
-    #order of data: realTime userTime sysTime 
+    #order of data: realTime userTime sysTime
     def loadtime(self, data):
         dataArr = data.split(' ')
         self.realTime.setText("Real: " + dataArr[0])
@@ -468,8 +493,8 @@ class Ui_Form(object):
         usT = float(dataArr[1]) + float(dataArr[2])
         self.userSystemTime.setText("User + System: " + str(usT))
         self.userSystemTime_2.setText("User + System: " + str(usT))
-        
-    #displays vars, 
+    
+    #displays vars,
     #assumes the order is opening var total, opening var interest, opening var credit, closing total, closing interest, closing credit
     def loadvars(self, data):
         dataArr = data.split(' ')
@@ -493,7 +518,7 @@ class Ui_Form(object):
         col = 1
         sum = 0.0
         #investment grade A through BBB
-        for col in range (1, 10): 
+        for col in range (1, 10):
             for curRow in range(topRow, topRow+6):
                 cell = self.changeTable.item(curRow, col)
                 sum += float(cell.text())
@@ -501,16 +526,17 @@ class Ui_Form(object):
             self.changeTable.setItem(topRow+10, col, QtGui.QTableWidgetItem(str(sum)))
             sum = 0.0
         #junk c, cc, ccc
-        for col in range (1, 10): 
+        for col in range (1, 10):
             for curRow in range(topRow+6, topRow+9):
                 cell = self.changeTable.item(curRow, col)
                 sum += float(cell.text())
             #have now summed up every item in this col
             self.changeTable.setItem(topRow+11, col, QtGui.QTableWidgetItem(str(sum)))
             sum = 0.0
-            
+    
     #"loadquality" - loads based of rating - need to calc intraday change and separate into investment and junk
     def loadquality(self, data, r):
+        print data
         dataArr = data.split(' ')
         row = r + 1
         col = 1
@@ -521,12 +547,12 @@ class Ui_Form(object):
                 col = 1
                 self.calculateIntraDayChange(row)
                 row += 1
-        
+    
     
     #"loadticker" - Notion, Risk , LGD for opening and closing positions for each ticker, need to calculate intra-day change
-    #returns the row to start at for the next process    
+    #returns the row to start at for the next process
     def loadticker(self, data):
-        dataArr = data.split(' ')   
+        dataArr = data.split(' ')
         row = 2
         col = 0 #column to place data
         for item in dataArr:
@@ -539,7 +565,7 @@ class Ui_Form(object):
                 self.changeTable.insertRow(row)
         self.changeTable.removeRow(row) #correcting extra row
         return row
-        
+    
     def calculateIntraDayChange(self, row): #calculates day's change for this row
         #notional
         n1 = self.changeTable.item(row, 1)
@@ -597,7 +623,7 @@ class Ui_Form(object):
         self.changeTable.setItem(1,8,r3)
         l3 = QtGui.QTableWidgetItem("LGD")
         self.changeTable.setItem(1,9,l3)
-
+        
         #Header Col
         A = QtGui.QTableWidgetItem("A")
         self.changeTable.setItem(4,0,A)
@@ -622,7 +648,7 @@ class Ui_Form(object):
         self.changeTable.setItem(14,0,ig)
         junk = QtGui.QTableWidgetItem("Junk")
         self.changeTable.setItem(15,0,junk)
-
+        
         #Setting Risk Table
         self.riskTable.setColumnWidth(0, 150)
         #2YR - 5YR - 10YR - 30YR
@@ -741,14 +767,19 @@ class Ui_Form(object):
         self.riskTable.setItem(1,8,mv30)
         QtCore.QObject.connect(self.riskTable, QtCore.SIGNAL(_fromUtf8("cellChanged(int, int)")), self.bumpCurve)
 
-  
+
 
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
     Form = QtGui.QWidget()
     ui = Ui_Form()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((HOST, PORT))
+    
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
+    s.close();
+
 
