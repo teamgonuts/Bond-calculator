@@ -24,7 +24,7 @@ class Ui_Form(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
         Form.setSizePolicy(sizePolicy)
-        Form.setWindowTitle(QtGui.QApplication.translate("Form", "Bond Raper", None, QtGui.QApplication.UnicodeUTF8))
+        Form.setWindowTitle(QtGui.QApplication.translate("Form", "O.N.Y.X - Think of Clever Name...possibly a place on Quartz", None, QtGui.QApplication.UnicodeUTF8))
         Form.setAutoFillBackground(False)
         self.verticalLayout = QtGui.QVBoxLayout(Form)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
@@ -262,6 +262,7 @@ class Ui_Form(object):
         QtCore.QObject.connect(self.shiftUp, QtCore.SIGNAL(_fromUtf8("clicked()")), self.shiftUpMeth)
         QtCore.QObject.connect(self.shiftDown, QtCore.SIGNAL(_fromUtf8("clicked()")), self.shiftDownMeth)
         QtCore.QObject.connect(self.reset, QtCore.SIGNAL(_fromUtf8("clicked()")), self.resetMeth)
+        #self.riskTable.cellChanged(self.realTime_2.hide)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -270,7 +271,6 @@ class Ui_Form(object):
         self.riskTable.setSortingEnabled(True)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("Form", "Risk", None, QtGui.QApplication.UnicodeUTF8))
     
-
     def loadPortfolio(self):
         """
         HOST = socket.gethostname()
@@ -298,6 +298,44 @@ class Ui_Form(object):
         self.load2YrHedge(data)
         data = "1 2 3 4"
         self.loadYieldCurve(data)
+        
+    def bumpCurve(self, row, col):
+        if row == 10: #if change is in bumpCurve row
+            #finding bucket
+            bucket = "69"
+            if col == 2:
+                bucket = "2"
+            elif col == 4:
+                bucket = "5"
+            elif col == 6:
+                bucket = "10"
+            elif col == 8:
+                bucket = "30"
+            
+            amount = self.riskTable.item(row, col).text()
+            
+            msg = "bump_" + bucket + "_" + amount
+            #made up data
+            data = "15 14 13 12 11 10 9 8 7 6 5 4 3 2 1"
+            dataArr = data.split(' ')
+            row = 6
+            col = 1
+            i = 0
+            for item in dataArr:
+                if i < 8: #its the bucket info
+                    self.riskTable.setItem(row, col, QtGui.QTableWidgetItem(item))
+                    col += 1
+                    if i == 7: #time to move to the next row
+                        row += 1
+                        col = 2
+                elif i < 12: #its the 2 yr hedge
+                    self.riskTable.setItem(row, col, QtGui.QTableWidgetItem(item))
+                    col += 2
+                i += 1
+            
+        #update time
+        time = dataArr[12] + " " +  dataArr[13] + " " + dataArr[14]
+        self.loadtime(time)
     
     #resets all the data entered cells
     def resetMeth(self):
@@ -690,6 +728,8 @@ class Ui_Form(object):
         mv30 = QtGui.QTableWidgetItem("Market Val")
         mv30.setTextAlignment(QtCore.Qt.AlignCenter)
         self.riskTable.setItem(1,8,mv30)
+        QtCore.QObject.connect(self.riskTable, QtCore.SIGNAL(_fromUtf8("cellChanged(int, int)")), self.bumpCurve)
+
   
 
 if __name__ == "__main__":
